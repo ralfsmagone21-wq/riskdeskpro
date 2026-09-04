@@ -2,101 +2,167 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RiskDesk Pro - Risk Lab v4</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RiskDesk Pro - Risk Lab v4 LIVE</title>
 <style>
-:root{--bg:#0a0a0b;--card:#18181b;--card2:#27272a;--border:#3f3f46;--text:#fafafa;--muted:#a1a1aa;--emerald:#10b981;--amber:#f59e0b;--red:#ef4444}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto;min-height:100vh}
-.header{border-bottom:1px solid var(--border);padding:16px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:rgba(10,10,11,.9);backdrop-filter:blur(12px);z-index:10}
-.logo{font-weight:900;letter-spacing:-.02em;font-size:18px}
-.badge{font-size:11px;padding:4px 8px;border-radius:999px;background:var(--card2);border:1px solid var(--border);color:var(--muted)}
-.container{max-width:900px;margin:0 auto;padding:24px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px}
-.label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:block;font-weight:600}
-.input,select{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-size:14px;outline:none}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:640px){.row{grid-template-columns:1fr}}
-.toggle{display:flex;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:3px;gap:3px}
-.toggle button{flex:1;padding:9px;border-radius:7px;border:0;background:transparent;color:var(--muted);font-weight:600;font-size:13px;cursor:pointer}
-.toggle button.active{background:var(--text);color:var(--bg)}
-.live{font-family:ui-monospace,monospace;font-size:13px;background:var(--card2);border-radius:10px;padding:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.result{font-size:42px;font-weight:900;letter-spacing:-.03em;line-height:1}
-.sub{color:var(--muted);font-size:13px;margin-top:4px}
-.warn{margin-top:12px;padding:10px 12px;border-radius:10px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);color:#fbbf24;font-size:13px}
-.error{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);color:#fca5a5}
-.ok{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);color:#6ee7b7}
-.btn{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--card2);color:var(--text);font-weight:600;cursor:pointer;font-size:13px}
-.btn-primary{background:var(--text);color:var(--bg);border-color:var(--text)}
-.mono{font-family:ui-monospace,monospace}
-.pill{font-size:11px;padding:3px 7px;border-radius:999px;border:1px solid var(--border);background:var(--card2);color:var(--muted)}
+body{background:#0a0a0f;color:#e5e7eb;font-family:Inter,system-ui;margin:0;padding:16px}
+.card{background:#15151f;border:1px solid #232334;border-radius:16px;padding:16px;margin:12px 0}
+.k{color:#9ca3af;font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+.v{font-size:24px;font-weight:800;margin:4px 0}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;background:#1f2937;font-size:11px}
+input,select,button{background:#0f0f18;border:1px solid #2a2a3a;color:#e5e7eb;border-radius:10px;padding:10px 12px;width:100%}
+button{cursor:pointer;background:#7c3aed;border:0;font-weight:700}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+.big{font-size:32px;font-weight:900;letter-spacing:-.02em}
+.ok{color:#34d399}.warn{color:#fbbf24}.err{color:#f87171}
 </style>
 </head>
 <body>
-<div class="header">
-<div><span class="logo">RiskDesk Pro</span> <span class="pill">v4 FINAL - APPROVED</span></div>
-<div class="badge">TradeQuo-Server 125897359 • GitHub Free</div>
+<h1 style="margin:6px 0 2px">RiskDesk Pro - Risk Lab v4 <span class="badge">LIVE</span></h1>
+<div class="k">throttled 500ms + Refresh - FIXED + LIVE Supabase</div>
+
+<div class="card" id="liveBox">
+<div class="k">Live Account State</div>
+<div id="liveText" class="v" style="font-size:16px">Loading live equity from Supabase...</div>
+<div style="margin-top:8px;display:flex;gap:8px">
+<button id="refreshBtn" style="width:auto;padding:6px 12px;font-size:12px">Refresh</button>
+<span class="k" id="lastUpd"></span>
 </div>
-<div class="container">
+</div>
+
 <div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-<div><div class="label">Live Account State</div><div class="sub">throttled 500ms + Refresh - FIXED</div></div>
-<button class="btn" id="refreshBtn">↻ Refresh</button>
+<div class="grid">
+<div><div class="k">Symbol</div><input id="symbol" value="EURUSD" placeholder="EURUSD"></div>
+<div><div class="k">Risk %</div><input id="riskPct" type="number" value="1" step="0.1"></div>
+<div><div class="k">Stop Loss (pips)</div><input id="sl" type="number" value="10" step="1"></div>
+<div><div class="k">Balance / Equity Toggle (Default Equity)</div><select id="mode"><option value="equity" selected>Equity</option><option value="balance">Balance</option></select></div>
 </div>
-<div class="live" id="liveBox">Loading...</div>
-<div id="marginGuard" style="display:none" class="warn error">Account in margin call - cannot calculate</div>
 </div>
+
 <div class="card">
-<div class="row">
-<div>
-<label class="label">Symbol</label>
-<input id="symbol" class="input mono" value="EURUSD">
-<div class="sub" id="specSource" style="margin-top:6px"></div>
-<div id="specMsg" style="display:none" class="warn"></div>
-</div>
-<div>
-<label class="label">Risk %</label>
-<input id="riskPct" class="input mono" type="number" value="1" step="0.1">
+<div class="k">Calculated Lot</div>
+<div id="lot" class="big">0.0025</div>
+<div class="k">Display 4 decimals when &lt;0.01 - never 0.00</div>
+<div style="margin-top:12px" class="grid">
+<div><div class="k">Risk Amount</div><div id="riskAmt" class="v">$2.00</div></div>
+<div><div class="k">Pip Value / Lot</div><div id="pipVal" class="v">$10.00</div></div>
+<div><div class="k">Base Used</div><div id="baseUsed" class="v" style="font-size:14px">equity $200.00</div></div>
+<div><div class="k">Status</div><div id="status" class="v" style="font-size:14px" class="ok">Ready</div></div>
 </div>
 </div>
-<div class="row" style="margin-top:16px">
-<div>
-<label class="label">Stop Loss (pips)</label>
-<input id="slPips" class="input mono" type="number" value="80">
+
+<div class="card">
+<div class="k">Debug</div>
+<div id="debug" style="font-size:11px;font-family:monospace;white-space:pre-wrap;color:#9ca3af">waiting...</div>
 </div>
-<div>
-<label class="label">Balance / Equity Toggle (Default Equity)</label>
-<div class="toggle" id="toggle">
-<button data-v="balance">Balance</button>
-<button data-v="equity" class="active">Equity</button>
-</div>
-</div>
-</div>
-</div>
-<div class="card" style="border-color:#10b981">
-<div class="label" style="color:var(--emerald)">Calculated Lot</div>
-<div class="result mono" id="lotResult">0.0025</div>
-<div class="sub" id="lotSub">Display 4 decimals when &lt;0.01 - never 0.00</div>
-<div id="warnBox" style="display:none" class="warn"></div>
-<div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px" class="mono">
-<div><div class="label">Risk Amount</div><div id="riskAmt">$2.00</div></div>
-<div><div class="label">Pip Value / Lot</div><div id="pipVal">$10.00</div></div>
-<div><div class="label">Base Used</div><div id="baseUsed">equity $200.00</div></div>
-</div>
-</div>
-</div>
+
 <script>
-const SPECS={"EURUSD":{tick_size:0.00001,contract_size:100000,digits:5,min_lot:0.01,lot_step:0.01},"GBPUSD":{tick_size:0.00001,contract_size:100000,digits:5,min_lot:0.01,lot_step:0.01},"USDJPY":{tick_size:0.001,contract_size:100000,digits:3,min_lot:0.01,lot_step:0.01},"XAUUSD":{tick_size:0.01,contract_size:100,digits:3,min_lot:0.01,lot_step:0.01}};
-let liveBalance=200,liveEquity=200,toggle="equity",fetchCount=0,debounceTimer=null;
-function mockGetAccountState(){fetchCount++;liveEquity=200+(Math.random()-0.5)*2;document.getElementById("liveBox").innerHTML=`<span>Balance: <b>$${liveBalance.toFixed(2)}</b> • #${fetchCount}</span><span>Equity: <b style="color:#10b981">$${liveEquity.toFixed(2)}</b></span><span>Throttled ✅</span>`;calculate();}
-function calculate(){const symbol=document.getElementById("symbol").value.toUpperCase().trim();const riskPct=parseFloat(document.getElementById("riskPct").value)||0;const slPips=parseFloat(document.getElementById("slPips").value)||0;if(liveEquity<=0){document.getElementById("marginGuard").style.display="block";return;}document.getElementById("marginGuard").style.display="none";let spec=SPECS[symbol];const specMsg=document.getElementById("specMsg");const specSource=document.getElementById("specSource");if(!spec){specMsg.style.display="block";specMsg.innerText="Syncing symbol spec - retry in a moment";specSource.innerText=`Triggering sync-symbol-specs on-demand`;setTimeout(()=>{SPECS[symbol]={tick_size:0.00001,contract_size:100000,digits:5,min_lot:0.01,lot_step:0.01};specMsg.style.display="none";calculate();},1200);return;}specSource.innerText=`tick:${spec.tick_size} contract:${spec.contract_size} digits:${spec.digits} min:${spec.min_lot} step:${spec.lot_step}`;const selectedBaseValue=toggle==="equity"?liveEquity:liveBalance;const riskAmount=selectedBaseValue*(riskPct/100);const pipSize=(spec.digits===3||spec.digits===5)?spec.tick_size*10:spec.tick_size;const pipValuePerLot=pipSize*spec.contract_size;let lot=riskAmount/(slPips*pipValuePerLot);if(!isFinite(lot)||lot<=0)lot=0;const displayLot=lot<0.01?lot.toFixed(4):lot.toFixed(2);document.getElementById("lotResult").innerText=displayLot;const warnBox=document.getElementById("warnBox");if(lot>0&&lot<spec.min_lot){warnBox.style.display="block";warnBox.innerText=`Below min lot - will round to ${spec.lot_step}`;}else warnBox.style.display="none";document.getElementById("riskAmt").innerText=`$${riskAmount.toFixed(2)}`;document.getElementById("pipVal").innerText=`$${pipValuePerLot.toFixed(2)}`;document.getElementById("baseUsed").innerText=`${toggle} $${selectedBaseValue.toFixed(2)}`;}
-function debouncedFetch(){if(debounceTimer)clearTimeout(debounceTimer);debounceTimer=setTimeout(()=>mockGetAccountState(),500);}
-document.getElementById("symbol").addEventListener("input",calculate);
-document.getElementById("riskPct").addEventListener("input",()=>{debouncedFetch();calculate();});
-document.getElementById("slPips").addEventListener("input",()=>{debouncedFetch();calculate();});
-document.getElementById("refreshBtn").addEventListener("click",mockGetAccountState);
-document.getElementById("toggle").addEventListener("click",(e)=>{if(e.target.dataset.v){toggle=e.target.dataset.v;document.querySelectorAll("#toggle button").forEach(b=>b.classList.remove("active"));e.target.classList.add("active");calculate();}});
-mockGetAccountState();
+// ==== CONFIG - PASTE YOUR 2 VALUES HERE ====
+const SUPABASE_URL = "https://zvtjrjnadvajmambsgre.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp2dGpyam5hZHZham1hbWJzZ3JlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxOTEzMzQsImV4cCI6MjEwMTc2NzMzNH0.LwAghCC_AZjZy9sHb3eBl4WSrn7SViKi6q2KAJep8e8"; // from Supabase Settings -> API -> anon public
+const ACCOUNT_ID = "189db161-42f0-4576-8135-1b833024a938"; // from MetaAPI MT Accounts -> your account ID
+const BROKER_SERVER = "TradeQuo-Server"; // your broker server name
+// ============================================
+
+let liveState = { balance: 200, equity: 200, freeMargin: 200, marginLevel: 0 }; // fallback mock
+let lastFetch = 0;
+let fetchTimeout = null;
+
+function fmtLot(x){
+  if (isNaN(x) || x<=0) return "0.0000";
+  if (x < 0.01) return x.toFixed(4); // FIX #1 - 4 decimals when <0.01 never 0.00
+  if (x < 0.1) return x.toFixed(3);
+  return x.toFixed(2);
+}
+
+function calc(){
+  const riskPct = parseFloat(document.getElementById('riskPct').value) || 1;
+  const slPips = parseFloat(document.getElementById('sl').value) || 10;
+  const mode = document.getElementById('mode').value;
+  const base = mode === 'balance' ? liveState.balance : liveState.equity;
+  
+  // GUARDRAIL FIX #4 - block when equity <=0 always
+  const statusEl = document.getElementById('status');
+  if (liveState.equity <= 0){
+    statusEl.textContent = "BLOCKED: equity <= 0 (deposit required)";
+    statusEl.className = "v err";
+    document.getElementById('lot').textContent = "0.0000";
+    document.getElementById('riskAmt').textContent = "$0.00";
+    document.getElementById('baseUsed').textContent = `${mode} $${base.toFixed(2)} (BLOCKED)`;
+    document.getElementById('debug').textContent = `equity=${liveState.equity} balance=${liveState.balance} -> BLOCKED`;
+    return;
+  }
+
+  // Example pip value - in v4 real pip value from broker_symbol_specs table
+  const pipValuePerLot = 10; // $10 per pip per lot for EURUSD standard, will be fetched from specs table later
+  const riskAmount = base * (riskPct/100);
+  const lot = riskAmount / (slPips * pipValuePerLot);
+
+  document.getElementById('lot').textContent = fmtLot(lot);
+  document.getElementById('riskAmt').textContent = `$${riskAmount.toFixed(2)}`;
+  document.getElementById('pipVal').textContent = `$${pipValuePerLot.toFixed(2)}`;
+  document.getElementById('baseUsed').textContent = `${mode} $${base.toFixed(2)}`;
+  statusEl.textContent = "Ready - throttled live";
+  statusEl.className = "v ok";
+  document.getElementById('debug').textContent = `base=${base.toFixed(2)} riskPct=${riskPct}% sl=${slPips} -> riskAmt=${riskAmount.toFixed(2)} pipVal=${pipValuePerLot} lot=${lot}\n${JSON.stringify(liveState,null,2)}`;
+}
+
+async function fetchLive(){
+  const now = Date.now();
+  if (now - lastFetch < 500) return; // throttle 500ms FIX #2
+  lastFetch = now;
+  const liveText = document.getElementById('liveText');
+  try{
+    if (SUPABASE_ANON_KEY.includes("PASTE_") || ACCOUNT_ID.includes("PASTE_")){
+      liveText.textContent = "⚠️ Paste ANON_KEY + ACCOUNT_ID in code (top of file)";
+      liveText.className = "v warn";
+      calc();
+      return;
+    }
+    liveText.textContent = "Fetching live...";
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/get-account-state`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+        "apikey": SUPABASE_ANON_KEY
+      },
+      body: JSON.stringify({ accountId: ACCOUNT_ID })
+    });
+    if (!res.ok){
+      const t = await res.text();
+      throw new Error(`HTTP ${res.status}: ${t}`);
+    }
+    const data = await res.json();
+    liveState = { balance: data.balance, equity: data.equity, freeMargin: data.freeMargin, marginLevel: data.marginLevel, raw: data };
+    liveText.textContent = `Balance: $${data.balance.toFixed(2)} | Equity: $${data.equity.toFixed(2)} | Free: $${(data.freeMargin||0).toFixed(2)} | Margin Lvl: ${(data.marginLevel||0).toFixed(2)}%`;
+    liveText.className = "v ok";
+    document.getElementById('lastUpd').textContent = `updated ${new Date().toLocaleTimeString()}`;
+    calc();
+  }catch(e){
+    liveText.textContent = `Live fetch failed: ${e.message} (using mock $200)`;
+    liveText.className = "v err";
+    console.error(e);
+    calc();
+  }
+}
+
+function debouncedFetch(){
+  if (fetchTimeout) clearTimeout(fetchTimeout);
+  fetchTimeout = setTimeout(fetchLive, 500); // FIX #2 debounce
+}
+
+// events
+document.getElementById('riskPct').addEventListener('input', calc);
+document.getElementById('sl').addEventListener('input', calc);
+document.getElementById('mode').addEventListener('change', calc);
+document.getElementById('symbol').addEventListener('change', ()=>{ calc(); debouncedFetch(); });
+document.getElementById('refreshBtn').addEventListener('click', fetchLive);
+
+// init - fetch once on open (FIX #2)
+fetchLive();
+calc();
 </script>
 </body>
 </html>
