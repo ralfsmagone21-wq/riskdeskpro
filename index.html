@@ -15,7 +15,6 @@ body{background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,
 .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px}
 .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:block;font-weight:600}
 .input,select{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-size:14px;outline:none}
-.input:focus{border-color:var(--emerald)}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media(max-width:640px){.row{grid-template-columns:1fr}}
 .toggle{display:flex;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:3px;gap:3px}
@@ -29,7 +28,6 @@ body{background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,
 .ok{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);color:#6ee7b7}
 .btn{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--card2);color:var(--text);font-weight:600;cursor:pointer;font-size:13px}
 .btn-primary{background:var(--text);color:var(--bg);border-color:var(--text)}
-.slider{width:100%}
 .mono{font-family:ui-monospace,monospace}
 .pill{font-size:11px;padding:3px 7px;border-radius:999px;border:1px solid var(--border);background:var(--card2);color:var(--muted)}
 </style>
@@ -37,42 +35,37 @@ body{background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,
 <body>
 <div class="header">
 <div><span class="logo">RiskDesk Pro</span> <span class="pill">v4 FINAL - APPROVED</span></div>
-<div class="badge">TradeQuo-Server 125897359 • GitHub Pages Free</div>
+<div class="badge">TradeQuo-Server 125897359 • GitHub Free</div>
 </div>
 <div class="container">
 <div class="card">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-<div><div class="label">Live Account State</div><div class="sub">get-account-state • throttled 500ms + Refresh (FIXED per Claude #2)</div></div>
+<div><div class="label">Live Account State</div><div class="sub">throttled 500ms + Refresh - FIXED</div></div>
 <button class="btn" id="refreshBtn">↻ Refresh</button>
 </div>
-<div class="live" id="liveBox">Loading live equity...</div>
-<div id="marginGuard" style="display:none" class="warn error" style="margin-top:12px">Account in margin call - cannot calculate</div>
+<div class="live" id="liveBox">Loading...</div>
+<div id="marginGuard" style="display:none" class="warn error">Account in margin call - cannot calculate</div>
 </div>
-
 <div class="card">
 <div class="row">
 <div>
-<label class="label">Symbol (from broker_symbol_specs)</label>
-<input id="symbol" class="input mono" value="EURUSD" placeholder="EURUSD">
-<div class="sub" id="specSource" style="margin-top:6px">Spec source: broker_symbol_specs table • tick_size:0.00001 contract:100000 digits:5</div>
-<div id="specMsg" style="display:none" class="warn" style="margin-top:8px"></div>
+<label class="label">Symbol</label>
+<input id="symbol" class="input mono" value="EURUSD">
+<div class="sub" id="specSource" style="margin-top:6px"></div>
+<div id="specMsg" style="display:none" class="warn"></div>
 </div>
 <div>
 <label class="label">Risk %</label>
-<div style="display:flex;gap:8px">
-<input id="riskPct" class="input mono" type="number" value="1" step="0.1" min="0.1" max="10">
-<input id="riskSlider" class="slider" type="range" min="0.1" max="5" step="0.1" value="1" style="flex:1">
-</div>
+<input id="riskPct" class="input mono" type="number" value="1" step="0.1">
 </div>
 </div>
 <div class="row" style="margin-top:16px">
 <div>
 <label class="label">Stop Loss (pips)</label>
-<input id="slPips" class="input mono" type="number" value="80" min="1">
-<div class="sub">JPY pairs = 2 digits, 5-digit brokers pip = 10 × tickSize (FIXED)</div>
+<input id="slPips" class="input mono" type="number" value="80">
 </div>
 <div>
-<label class="label">Balance / Equity Toggle (Default Equity - FIXED per Claude #1)</label>
+<label class="label">Balance / Equity Toggle (Default Equity)</label>
 <div class="toggle" id="toggle">
 <button data-v="balance">Balance</button>
 <button data-v="equity" class="active">Equity</button>
@@ -80,156 +73,29 @@ body{background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,
 </div>
 </div>
 </div>
-
 <div class="card" style="border-color:#10b981">
-<div class="label" style="color:var(--emerald)">Calculated Lot (client-side only, never saved to DB)</div>
+<div class="label" style="color:var(--emerald)">Calculated Lot</div>
 <div class="result mono" id="lotResult">0.0025</div>
-<div class="sub" id="lotSub">Display 4 decimals when &lt;0.01 - never 0.00 • Formula: riskAmount = selectedBaseValue × risk%</div>
-<div id="warnBox" style="display:none" class="warn">Below min lot - will round to 0.01</div>
-<div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px" class="mono" id="breakdown">
+<div class="sub" id="lotSub">Display 4 decimals when &lt;0.01 - never 0.00</div>
+<div id="warnBox" style="display:none" class="warn"></div>
+<div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px" class="mono">
 <div><div class="label">Risk Amount</div><div id="riskAmt">$2.00</div></div>
 <div><div class="label">Pip Value / Lot</div><div id="pipVal">$10.00</div></div>
 <div><div class="label">Base Used</div><div id="baseUsed">equity $200.00</div></div>
 </div>
-<div class="sub mono" id="formula" style="margin-top:12px;background:var(--card2);padding:10px;border-radius:8px">selectedBaseValue = equity ? liveEquity : liveBalance → $200 × 1% = $2 → pipSize = 5-digit ? tickSize×10 : tickSize = 0.0001 → pipValuePerLot = 0.0001 × 100000 = $10 → lot = $2 / (80 × $10) = 0.0025</div>
-</div>
-
-<div class="card">
-<div class="label">Acceptance Test - Must Pass</div>
-<div class="sub">$200 1% 80 pips EURUSD → 0.0025 shown not 0.00 ✅ • Toggle changes lot ✅ • Margin guard always checks equity even in Balance mode ✅ • Warning + rounding to lot_step ✅ • Throttle 500ms + Refresh ✅ • Missing spec "Syncing - retry" not "reconnect" ✅ • No DB writes ✅ • RLS correct ✅</div>
-</div>
-
-<div class="card ok">
-<div class="label" style="color:var(--emerald)">GitHub Pages - Free Forever (Netlify was paused)</div>
-<div class="sub">Old Netlify project 6432f5e0-56f2-4ab4-be33-89f9790f15e4 - Last deploy Aug 9 - Deploys paused per screenshot. New GitHub Pages: ralfsmagone21-wq.github.io/riskdeskpro - Free, unlimited, no paywall.</div>
 </div>
 </div>
-
 <script>
-// MOCK broker_symbol_specs - in prod this comes from Supabase table broker_symbol_specs (shared ref data, no user_id, RLS read auth, write service_role)
-const SPECS = {
-  "EURUSD": {tick_size:0.00001, contract_size:100000, digits:5, min_lot:0.01, lot_step:0.01},
-  "GBPUSD": {tick_size:0.00001, contract_size:100000, digits:5, min_lot:0.01, lot_step:0.01},
-  "USDJPY": {tick_size:0.001, contract_size:100000, digits:3, min_lot:0.01, lot_step:0.01},
-  "XAUUSD": {tick_size:0.01, contract_size:100, digits:3, min_lot:0.01, lot_step:0.01},
-  "NAS100": {tick_size:0.1, contract_size:1, digits:1, min_lot:0.1, lot_step:0.1},
-  "US30": {tick_size:0.1, contract_size:1, digits:1, min_lot:0.1, lot_step:0.1}
-};
-
-let liveBalance = 200;
-let liveEquity = 200;
-let liveMargin = 850;
-let toggle = "equity";
-let debounceTimer = null;
-let fetchCount = 0;
-
-function mockGetAccountState(){
-  fetchCount++;
-  // Simulate live equity tick
-  liveBalance = 200;
-  liveEquity = 200 + (Math.random()-0.5)*2; // tiny tick
-  liveMargin = 850;
-  document.getElementById("liveBox").innerHTML = `<span>Balance: <b>$${liveBalance.toFixed(2)}</b> • fetch #${fetchCount}</span><span>Equity: <b style="color:#10b981">$${liveEquity.toFixed(2)}</b></span><span>Margin: <b>${liveMargin}%</b></span><span style="color:#a1a1aa">Throttled - not on every keystroke ✅</span>`;
-  calculate();
-}
-
-function calculate(){
-  const symbol = document.getElementById("symbol").value.toUpperCase().trim();
-  const riskPct = parseFloat(document.getElementById("riskPct").value) || 0;
-  const slPips = parseFloat(document.getElementById("slPips").value) || 0;
-  
-  // Guardrail - always equity even in Balance mode (FIXED)
-  if(liveEquity <= 0){
-    document.getElementById("marginGuard").style.display="block";
-    document.getElementById("lotResult").innerText="—";
-    return;
-  } else {
-    document.getElementById("marginGuard").style.display="none";
-  }
-
-  let spec = SPECS[symbol];
-  const specMsg = document.getElementById("specMsg");
-  const specSource = document.getElementById("specSource");
-  
-  if(!spec){
-    specMsg.style.display="block";
-    specMsg.className="warn";
-    specMsg.innerText="Syncing symbol spec - retry in a moment";
-    specSource.innerText=`Spec source: missing - triggering sync-symbol-specs on-demand (FIXED per Claude #3)`;
-    // Simulate on-demand fetch
-    setTimeout(()=>{
-      if(symbol.length>=3){
-        SPECS[symbol] = {tick_size:0.00001, contract_size:100000, digits:5, min_lot:0.01, lot_step:0.01};
-        specMsg.style.display="none";
-        calculate();
-      } else {
-        specMsg.innerText="Symbol spec unavailable - check symbol name";
-        specMsg.className="warn error";
-      }
-    },1200);
-    return;
-  } else {
-    specMsg.style.display="none";
-    specSource.innerText=`Spec source: broker_symbol_specs table • tick_size:${spec.tick_size} contract:${spec.contract_size} digits:${spec.digits} min_lot:${spec.min_lot} lot_step:${spec.lot_step} • RLS: read auth, write service_role`;
-  }
-
-  const selectedBaseValue = toggle === "equity" ? liveEquity : liveBalance;
-  const riskAmount = selectedBaseValue * (riskPct/100);
-  const pipSize = (spec.digits === 3 || spec.digits === 5) ? spec.tick_size * 10 : spec.tick_size;
-  const conversionRate = 1; // TODO: direct FX pair, synthetic via USD for exotic (deferred v4)
-  const pipValuePerLot = pipSize * spec.contract_size * conversionRate;
-  let lot = riskAmount / (slPips * pipValuePerLot);
-
-  if(!isFinite(lot) || lot<=0) lot=0;
-
-  // Display logic: 4 decimals when <0.01
-  const displayLot = lot < 0.01 ? lot.toFixed(4) : lot.toFixed(2);
-  document.getElementById("lotResult").innerText = isFinite(lot) ? displayLot : "—";
-  
-  // Warning + rounding
-  const warnBox = document.getElementById("warnBox");
-  if(lot>0 && lot < spec.min_lot){
-    warnBox.style.display="block";
-    warnBox.innerText=`Below min lot - will round to ${spec.lot_step} (lot_step may be 0.1 for indices)`;
-  } else {
-    warnBox.style.display="none";
-  }
-
-  document.getElementById("riskAmt").innerText = `$${riskAmount.toFixed(2)}`;
-  document.getElementById("pipVal").innerText = `$${pipValuePerLot.toFixed(2)}`;
-  document.getElementById("baseUsed").innerText = `${toggle} $${selectedBaseValue.toFixed(2)}`;
-  document.getElementById("formula").innerText = `selectedBaseValue = ${toggle} ? liveEquity : liveBalance → $${selectedBaseValue.toFixed(2)} × ${riskPct}% = $${riskAmount.toFixed(2)} → pipSize = ${spec.digits}-digit ? tickSize×10 : tickSize = ${pipSize} → pipValuePerLot = ${pipSize} × ${spec.contract_size} = $${pipValuePerLot.toFixed(2)} → lot = $${riskAmount.toFixed(2)} / (${slPips} × $${pipValuePerLot.toFixed(2)}) = ${lot.toFixed(6)} → display ${displayLot}`;
-}
-
-function debouncedFetch(){
-  if(debounceTimer) clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(()=>{ mockGetAccountState(); }, 500);
-}
-
-// Events
-document.getElementById("symbol").addEventListener("input", calculate);
-document.getElementById("riskPct").addEventListener("input", (e)=>{
-  document.getElementById("riskSlider").value = e.target.value;
-  debouncedFetch();
-  calculate();
-});
-document.getElementById("riskSlider").addEventListener("input", (e)=>{
-  document.getElementById("riskPct").value = e.target.value;
-  debouncedFetch();
-  calculate();
-});
-document.getElementById("slPips").addEventListener("input", ()=>{ debouncedFetch(); calculate(); });
-document.getElementById("refreshBtn").addEventListener("click", mockGetAccountState);
-document.getElementById("toggle").addEventListener("click", (e)=>{
-  if(e.target.dataset.v){
-    toggle = e.target.dataset.v;
-    document.querySelectorAll("#toggle button").forEach(b=>b.classList.remove("active"));
-    e.target.classList.add("active");
-    calculate();
-  }
-});
-
-// Init - once when Risk Lab opens (FIXED per Claude #2)
+const SPECS={"EURUSD":{tick_size:0.00001,contract_size:100000,digits:5,min_lot:0.01,lot_step:0.01},"GBPUSD":{tick_size:0.00001,contract_size:100000,digits:5,min_lot:0.01,lot_step:0.01},"USDJPY":{tick_size:0.001,contract_size:100000,digits:3,min_lot:0.01,lot_step:0.01},"XAUUSD":{tick_size:0.01,contract_size:100,digits:3,min_lot:0.01,lot_step:0.01}};
+let liveBalance=200,liveEquity=200,toggle="equity",fetchCount=0,debounceTimer=null;
+function mockGetAccountState(){fetchCount++;liveEquity=200+(Math.random()-0.5)*2;document.getElementById("liveBox").innerHTML=`<span>Balance: <b>$${liveBalance.toFixed(2)}</b> • #${fetchCount}</span><span>Equity: <b style="color:#10b981">$${liveEquity.toFixed(2)}</b></span><span>Throttled ✅</span>`;calculate();}
+function calculate(){const symbol=document.getElementById("symbol").value.toUpperCase().trim();const riskPct=parseFloat(document.getElementById("riskPct").value)||0;const slPips=parseFloat(document.getElementById("slPips").value)||0;if(liveEquity<=0){document.getElementById("marginGuard").style.display="block";return;}document.getElementById("marginGuard").style.display="none";let spec=SPECS[symbol];const specMsg=document.getElementById("specMsg");const specSource=document.getElementById("specSource");if(!spec){specMsg.style.display="block";specMsg.innerText="Syncing symbol spec - retry in a moment";specSource.innerText=`Triggering sync-symbol-specs on-demand`;setTimeout(()=>{SPECS[symbol]={tick_size:0.00001,contract_size:100000,digits:5,min_lot:0.01,lot_step:0.01};specMsg.style.display="none";calculate();},1200);return;}specSource.innerText=`tick:${spec.tick_size} contract:${spec.contract_size} digits:${spec.digits} min:${spec.min_lot} step:${spec.lot_step}`;const selectedBaseValue=toggle==="equity"?liveEquity:liveBalance;const riskAmount=selectedBaseValue*(riskPct/100);const pipSize=(spec.digits===3||spec.digits===5)?spec.tick_size*10:spec.tick_size;const pipValuePerLot=pipSize*spec.contract_size;let lot=riskAmount/(slPips*pipValuePerLot);if(!isFinite(lot)||lot<=0)lot=0;const displayLot=lot<0.01?lot.toFixed(4):lot.toFixed(2);document.getElementById("lotResult").innerText=displayLot;const warnBox=document.getElementById("warnBox");if(lot>0&&lot<spec.min_lot){warnBox.style.display="block";warnBox.innerText=`Below min lot - will round to ${spec.lot_step}`;}else warnBox.style.display="none";document.getElementById("riskAmt").innerText=`$${riskAmount.toFixed(2)}`;document.getElementById("pipVal").innerText=`$${pipValuePerLot.toFixed(2)}`;document.getElementById("baseUsed").innerText=`${toggle} $${selectedBaseValue.toFixed(2)}`;}
+function debouncedFetch(){if(debounceTimer)clearTimeout(debounceTimer);debounceTimer=setTimeout(()=>mockGetAccountState(),500);}
+document.getElementById("symbol").addEventListener("input",calculate);
+document.getElementById("riskPct").addEventListener("input",()=>{debouncedFetch();calculate();});
+document.getElementById("slPips").addEventListener("input",()=>{debouncedFetch();calculate();});
+document.getElementById("refreshBtn").addEventListener("click",mockGetAccountState);
+document.getElementById("toggle").addEventListener("click",(e)=>{if(e.target.dataset.v){toggle=e.target.dataset.v;document.querySelectorAll("#toggle button").forEach(b=>b.classList.remove("active"));e.target.classList.add("active");calculate();}});
 mockGetAccountState();
 </script>
 </body>
