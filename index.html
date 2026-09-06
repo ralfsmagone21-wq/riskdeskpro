@@ -5,10 +5,88 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RiskDesk Pro - LIVE</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;900&display=swap" rel="stylesheet">
-<style>body{font-family:Inter,system-ui;background:#07070b;color:#e5e7eb} .glass{background:rgba(18,18,26,0.9);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.07)}</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;650;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07070a;
+    --bg-wash: radial-gradient(1200px 500px at 50% -10%, rgba(124,92,255,0.10), transparent 60%);
+    --surface:#101018;
+    --surface-2:#15151f;
+    --line: rgba(255,255,255,0.07);
+    --line-soft: rgba(255,255,255,0.045);
+    --violet:#8a6bff;
+    --violet-dim: rgba(138,107,255,0.35);
+    --amber:#f0a63a;
+    --emerald:#3ddc97;
+    --text:#eceef2;
+    --text-dim:#8b8b99;
+    --text-faint:#5b5b68;
+  }
+  *{-webkit-tap-highlight-color:transparent}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--bg);
+    background-image:var(--bg-wash);
+    color:var(--text);
+    letter-spacing:-0.01em;
+  }
+  .mono{ font-family:'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; letter-spacing:-0.01em; }
+  .label{ font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-faint); font-weight:600; }
+  .glass{
+    background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0) 40%), var(--surface);
+    border:1px solid var(--line);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 20px 40px -24px rgba(0,0,0,0.6);
+  }
+  .field{
+    background: rgba(0,0,0,0.35);
+    border:1px solid var(--line);
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .field:focus{ outline:none; border-color: var(--violet-dim); background: rgba(0,0,0,0.5); }
+
+  .hero-card{
+    position:relative;
+    background: linear-gradient(180deg, rgba(138,107,255,0.09), rgba(138,107,255,0.02) 45%, var(--surface) 100%);
+    border:1px solid rgba(138,107,255,0.22);
+  }
+  .hero-glow{
+    position:absolute; inset:-1px; border-radius:inherit; pointer-events:none;
+    box-shadow: 0 0 0 1px rgba(138,107,255,0.10), 0 0 60px 6px rgba(138,107,255,0.10);
+    animation: breathe 4.5s ease-in-out infinite;
+  }
+  @keyframes breathe{
+    0%,100%{ box-shadow: 0 0 0 1px rgba(138,107,255,0.10), 0 0 50px 4px rgba(138,107,255,0.08); }
+    50%{ box-shadow: 0 0 0 1px rgba(138,107,255,0.18), 0 0 70px 10px rgba(138,107,255,0.16); }
+  }
+
+  input[type=range]{ -webkit-appearance:none; appearance:none; height:3px; background:var(--line); border-radius:99px; }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none; width:15px; height:15px; border-radius:50%;
+    background:var(--violet); box-shadow: 0 0 0 4px rgba(138,107,255,0.18), 0 2px 6px rgba(0,0,0,0.5);
+    cursor:pointer; margin-top:-6px;
+  }
+  input[type=range]::-moz-range-thumb{
+    width:15px; height:15px; border-radius:50%; border:none;
+    background:var(--violet); box-shadow: 0 0 0 4px rgba(138,107,255,0.18);
+    cursor:pointer;
+  }
+
+  .seg-btn{ transition: all .15s ease; }
+  .dot{ width:6px; height:6px; border-radius:50%; display:inline-block; }
+
+  #gear{ transition: transform .2s ease, background .15s ease; }
+  #gear:active{ transform: scale(0.92); }
+  #refreshBtn:active{ transform: scale(0.96); }
+  #refreshBtn{ transition: transform .1s ease; }
+
+  ::selection{ background: rgba(138,107,255,0.35); }
+
+  @media (prefers-reduced-motion: reduce){
+    .hero-glow{ animation:none; }
+  }
+</style>
 </head>
-<body class="p-3 pb-28">
+<body class="px-3 pb-28 pt-1">
 <script>
 // === BAKED IN - NO SETUP NEEDED ===
 const SUPA_URL = "https://zvtjrjnadvajmambsgre.supabase.co";
@@ -19,50 +97,110 @@ localStorage.setItem('rd_anon', BAKED_ANON);
 localStorage.setItem('rd_live', BAKED_LIVE);
 if(BAKED_DEMO) localStorage.setItem('rd_demo', BAKED_DEMO);
 </script>
+
 <div class="max-w-[640px] mx-auto">
-  <div class="flex justify-between items-center py-4">
-    <div><h1 class="text-[24px] font-black">RiskDesk Pro <span class="text-violet-400">LIVE</span></h1><div class="text-[11px] text-zinc-500 tracking-widest uppercase">PUBLIC CORE v6.1 • 125904269 • SOLID</div></div>
-    <button id="gear" class="w-10 h-10 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center">⚙️</button>
+
+  <div class="flex justify-between items-center py-5">
+    <div>
+      <h1 class="text-[22px] font-[800] leading-none flex items-baseline gap-2">
+        RiskDesk Pro <span class="mono text-[13px] font-[600] text-[var(--violet)]">LIVE</span>
+      </h1>
+      <div class="mono text-[10px] text-[var(--text-faint)] mt-1.5 tracking-wide">v6.1 · 125904269 · SOLID CORE</div>
+    </div>
+    <button id="gear" class="w-10 h-10 rounded-full bg-[var(--surface-2)] border border-[var(--line)] flex items-center justify-center text-[15px]">⚙</button>
   </div>
 
-  <div id="setup" class="glass rounded-[20px] p-4 mb-3 hidden">
-    <div class="text-[12px] font-bold text-zinc-200">Settings (auto-filled)</div>
-    <div class="mt-2 space-y-2">
-      <input id="inpAnon" class="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-3 text-[11px] font-mono">
-      <input id="inpLive" class="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-3 text-[11px] font-mono">
-      <input id="inpDemo" placeholder="Optional DEMO UUID" class="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-3 text-[11px] font-mono">
-      <button id="saveIds" class="w-full bg-violet-600 text-white py-3 rounded-full font-bold text-[13px]">Save</button>
+  <div id="setup" class="glass rounded-[18px] p-4 mb-3 hidden">
+    <div class="label mb-3">Connection settings</div>
+    <div class="space-y-2">
+      <input id="inpAnon" placeholder="Supabase anon key" class="w-full field rounded-xl px-3 py-3 text-[11px] mono text-[var(--text-dim)]">
+      <input id="inpLive" placeholder="Live account UUID" class="w-full field rounded-xl px-3 py-3 text-[11px] mono text-[var(--text-dim)]">
+      <input id="inpDemo" placeholder="Demo account UUID (optional)" class="w-full field rounded-xl px-3 py-3 text-[11px] mono text-[var(--text-dim)]">
+      <button id="saveIds" class="w-full bg-[var(--violet)] text-black py-3 rounded-full font-[700] text-[13px] mt-1">Save</button>
     </div>
   </div>
 
-  <div class="glass rounded-[20px] p-4 mb-3">
-    <div class="flex justify-between items-center mb-2"><span class="text-[11px] uppercase tracking-widest text-zinc-500">Live Account State</span><div class="flex gap-2"><button id="btnLive" class="px-3 py-1.5 rounded-full bg-violet-600 text-[11px] font-bold">LIVE 125904269</button><button id="btnDemo" class="px-3 py-1.5 rounded-full bg-zinc-800 text-[11px] text-zinc-400">DEMO</button></div></div>
-    <div id="liveText" class="text-[13px] text-zinc-300">Connecting...</div>
-    <div class="flex gap-2 mt-3"><button id="refreshBtn" class="bg-white text-black px-4 py-2 rounded-full text-[12px] font-bold">↻ Refresh</button><span id="lastUpd" class="text-[10px] text-zinc-500 self-center"></span><span id="modeBadge" class="ml-auto text-[10px] px-2 py-1 rounded-full bg-amber-500/20 text-amber-300 hidden">DEMO $10k</span></div>
+  <div class="glass rounded-[18px] p-4 mb-3">
+    <div class="flex justify-between items-center mb-3">
+      <span class="label">Live account state</span>
+      <div class="flex gap-1.5 bg-[var(--surface-2)] p-0.5 rounded-full border border-[var(--line-soft)]">
+        <button id="btnLive" class="seg-btn px-3 py-1.5 rounded-full bg-[var(--violet)] text-black text-[11px] font-[700]">LIVE</button>
+        <button id="btnDemo" class="seg-btn px-3 py-1.5 rounded-full text-[11px] text-[var(--text-dim)] font-[600]">DEMO</button>
+      </div>
+    </div>
+    <div id="liveText" class="text-[13px] text-[var(--text-dim)] leading-relaxed mono">Connecting…</div>
+    <div class="flex items-center gap-3 mt-4">
+      <button id="refreshBtn" class="bg-[var(--text)] text-black px-4 py-2 rounded-full text-[12px] font-[700]">↻ Refresh</button>
+      <span id="lastUpd" class="text-[10px] text-[var(--text-faint)] mono"></span>
+      <span id="modeBadge" class="ml-auto text-[10px] mono px-2.5 py-1 rounded-full bg-[rgba(240,166,58,0.14)] text-[var(--amber)] border border-[rgba(240,166,58,0.25)] hidden">DEMO $10K</span>
+    </div>
   </div>
 
-  <div class="glass rounded-[20px] p-4 mb-3">
+  <div class="glass rounded-[18px] p-4 mb-3">
+    <div class="label mb-3">Position parameters</div>
     <div class="grid grid-cols-2 gap-3">
-      <div><label class="text-[10px] uppercase text-zinc-500">Symbol</label><input id="symbol" value="XAUUSD" class="w-full mt-1 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[14px] font-bold"></div>
-      <div><label class="text-[10px] uppercase text-zinc-500">Mode</label><select id="mode" class="w-full mt-1 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[14px]"><option value="equity" selected>Equity</option><option value="balance">Balance</option></select></div>
-      <div><label class="text-[10px] uppercase text-zinc-500">Risk % <span id="riskPctVal" class="text-violet-400">1.0%</span></label><input id="riskPct" type="range" min="0.1" max="5" step="0.1" value="1" class="w-full mt-2 accent-violet-600"><input id="riskPctNum" type="number" value="1" step="0.1" class="w-full mt-1 bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-[13px]"></div>
-      <div><label class="text-[10px] uppercase text-zinc-500">Stop Loss pips</label><input id="sl" type="number" value="15" class="w-full mt-1 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[14px]"></div>
+      <div>
+        <label class="label">Symbol</label>
+        <input id="symbol" value="XAUUSD" class="w-full mt-1.5 field rounded-xl px-3 py-3 text-[15px] font-[700] mono">
+      </div>
+      <div>
+        <label class="label">Base</label>
+        <select id="mode" class="w-full mt-1.5 field rounded-xl px-3 py-3 text-[14px] text-[var(--text)]">
+          <option value="equity" selected>Equity</option>
+          <option value="balance">Balance</option>
+        </select>
+      </div>
+      <div class="col-span-2">
+        <label class="label">Risk % <span id="riskPctVal" class="mono text-[var(--violet)] normal-case tracking-normal font-[700]">1.0%</span></label>
+        <input id="riskPct" type="range" min="0.1" max="5" step="0.1" value="1" class="w-full mt-3">
+        <input id="riskPctNum" type="number" value="1" step="0.1" class="w-full mt-2 field rounded-xl px-3 py-2 text-[13px] mono">
+      </div>
+      <div class="col-span-2">
+        <label class="label">Stop loss (pips)</label>
+        <input id="sl" type="number" value="15" class="w-full mt-1.5 field rounded-xl px-3 py-3 text-[14px] mono">
+      </div>
     </div>
   </div>
 
-  <div class="glass rounded-[28px] p-5 mb-3 border-violet-500/30 shadow-[0_0_40px_rgba(124,58,237,0.15)]">
-    <div class="text-[11px] uppercase tracking-widest text-zinc-500">Calculated Lot - 0.0025 FIXED</div>
-    <div id="lot" class="text-[52px] font-black tracking-tight mt-1">0.0025</div>
-    <div class="text-[11px] text-zinc-500">4 decimals when &lt;0.01 • never 0.00 • throttled 500ms</div>
-    <div class="grid grid-cols-2 gap-3 mt-5">
-      <div class="bg-black/40 rounded-2xl p-3"><div class="text-[10px] uppercase text-zinc-500">Risk Amount</div><div id="riskAmt" class="text-[18px] font-bold">$100.00</div></div>
-      <div class="bg-black/40 rounded-2xl p-3"><div class="text-[10px] uppercase text-zinc-500">Base Used</div><div id="baseUsed" class="text-[12px] font-bold">equity $10,000</div></div>
-      <div class="bg-black/40 rounded-2xl p-3"><div class="text-[10px] uppercase text-zinc-500">Status</div><div id="status" class="text-[12px] font-bold text-emerald-400">Ready</div></div>
-      <div class="bg-black/40 rounded-2xl p-3"><div class="text-[10px] uppercase text-zinc-500">Pip Value</div><div id="pipVal" class="text-[12px] font-bold">$10 / lot</div></div>
+  <div class="hero-card rounded-[26px] p-5 mb-3 relative overflow-hidden">
+    <div class="hero-glow rounded-[26px]"></div>
+    <div class="relative">
+      <div class="label">Calculated lot size</div>
+      <div id="lot" class="mono text-[56px] font-[700] tracking-tight mt-1 text-[var(--text)]">0.0025</div>
+      <div class="text-[10.5px] text-[var(--text-faint)] mt-0.5">4 decimals under 0.01 · never zero · throttled 500ms</div>
+
+      <div class="grid grid-cols-2 gap-2.5 mt-5">
+        <div class="bg-black/35 border border-[var(--line-soft)] rounded-2xl p-3">
+          <div class="label">Risk amount</div>
+          <div id="riskAmt" class="mono text-[17px] font-[700] mt-1">$100.00</div>
+        </div>
+        <div class="bg-black/35 border border-[var(--line-soft)] rounded-2xl p-3">
+          <div class="label">Base used</div>
+          <div id="baseUsed" class="mono text-[12px] font-[600] mt-1.5 text-[var(--text-dim)]">equity $10,000</div>
+        </div>
+        <div class="bg-black/35 border border-[var(--line-soft)] rounded-2xl p-3">
+          <div class="label">Status</div>
+          <div id="status" class="text-[12px] font-[700] mt-1.5 text-[var(--emerald)]">Ready</div>
+        </div>
+        <div class="bg-black/35 border border-[var(--line-soft)] rounded-2xl p-3">
+          <div class="label">Pip value</div>
+          <div id="pipVal" class="mono text-[12px] font-[600] mt-1.5 text-[var(--text-dim)]">$10 / lot</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="glass rounded-[16px] p-3"><div class="text-[10px] uppercase text-zinc-500">SOLID CORE - Public Ready</div><div class="text-[11px] text-zinc-400 mt-1">✅ Live equity from TradeQuo-Server (125904269) ✅ 0.0025 fix ✅ Throttle ✅ Guardrail ✅ Demo fallback<br><span class="text-zinc-500">Packs Phase 2: Journal / History / Presets - add later as cards</span></div></div>
+  <div class="glass rounded-[16px] p-4">
+    <div class="label mb-2.5">System status</div>
+    <div class="grid grid-cols-2 gap-y-2 text-[11.5px] text-[var(--text-dim)]">
+      <div class="flex items-center gap-2"><span class="dot bg-[var(--emerald)]"></span>Live equity feed</div>
+      <div class="flex items-center gap-2"><span class="dot bg-[var(--emerald)]"></span>0.0025 fixed floor</div>
+      <div class="flex items-center gap-2"><span class="dot bg-[var(--emerald)]"></span>Fetch throttle</div>
+      <div class="flex items-center gap-2"><span class="dot bg-[var(--emerald)]"></span>Zero-equity guardrail</div>
+    </div>
+    <div class="text-[10.5px] text-[var(--text-faint)] mt-3 pt-3 border-t border-[var(--line-soft)]">Phase 2 — journal, history and presets ship as additional cards.</div>
+  </div>
+
 </div>
 
 <script>
@@ -109,8 +247,8 @@ document.getElementById('riskPct').oninput=e=>{ document.getElementById('riskPct
 document.getElementById('riskPctNum').oninput=e=>{ document.getElementById('riskPct').value=e.target.value; document.getElementById('riskPctVal').textContent=parseFloat(e.target.value).toFixed(1)+'%'; calc(); };
 document.getElementById('sl').oninput=calc; document.getElementById('mode').onchange=calc;
 document.getElementById('refreshBtn').onclick=fetchLive;
-document.getElementById('btnLive').onclick=()=>{ sel='live'; document.getElementById('btnLive').className='px-3 py-1.5 rounded-full bg-violet-600 text-[11px] font-bold'; document.getElementById('btnDemo').className='px-3 py-1.5 rounded-full bg-zinc-800 text-[11px] text-zinc-400'; fetchLive(); };
-document.getElementById('btnDemo').onclick=()=>{ sel='demo'; if(!localStorage.getItem('rd_demo')){ document.getElementById('liveText').innerHTML='No demo ID yet - using $10k test mode. Create MetaAPI demo 125897359 to get real demo equity.'; isDemoFallback=true; calc(); return; } document.getElementById('btnDemo').className='px-3 py-1.5 rounded-full bg-violet-600 text-[11px] font-bold'; document.getElementById('btnLive').className='px-3 py-1.5 rounded-full bg-zinc-800 text-[11px] text-zinc-400'; fetchLive(); };
+document.getElementById('btnLive').onclick=()=>{ sel='live'; document.getElementById('btnLive').className='seg-btn px-3 py-1.5 rounded-full bg-[var(--violet)] text-black text-[11px] font-[700]'; document.getElementById('btnDemo').className='seg-btn px-3 py-1.5 rounded-full text-[11px] text-[var(--text-dim)] font-[600]'; fetchLive(); };
+document.getElementById('btnDemo').onclick=()=>{ sel='demo'; if(!localStorage.getItem('rd_demo')){ document.getElementById('liveText').innerHTML='No demo ID yet - using $10k test mode. Create MetaAPI demo 125897359 to get real demo equity.'; isDemoFallback=true; calc(); return; } document.getElementById('btnDemo').className='seg-btn px-3 py-1.5 rounded-full bg-[var(--violet)] text-black text-[11px] font-[700]'; document.getElementById('btnLive').className='seg-btn px-3 py-1.5 rounded-full text-[11px] text-[var(--text-dim)] font-[600]'; fetchLive(); };
 
 fetchLive(); calc();
 setInterval(fetchLive, 10000);
