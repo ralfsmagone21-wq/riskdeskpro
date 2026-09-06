@@ -3,18 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RiskDesk Pro V10 - Ready to Sell</title>
+<title>RiskDesk Pro V11</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-<style>body{font-family:Inter,system-ui;background:#07070b;color:#e5e7eb}.glass{background:rgba(18,18,26,0.92);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.07)}.glow{box-shadow:0 0 50px rgba(124,58,237,0.18)}.tap{min-height:48px}.sheet-enter{animation:sheetUp .28s cubic-bezier(.19,1,.22,1)}@keyframes sheetUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}.locked{position:relative}.locked .veil{position:absolute;inset:0;background:rgba(7,7,11,0.72);backdrop-filter:blur(3px);border-radius:inherit;display:flex;align-items:center;justify-content:center;z-index:10}</style>
+<style>
+  body{font-family:Inter,system-ui;background:#07070b;color:#e5e7eb}
+  .glass{background:rgba(18,18,26,0.92);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.07)}
+  .glow{box-shadow:0 0 50px rgba(124,58,237,0.18)}
+  .tap{min-height:48px}
+  .sheet-enter{animation:sheetUp .28s cubic-bezier(.19,1,.22,1)}
+  @keyframes sheetUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .toast-enter{animation:toastUp .25s ease}
+  @keyframes toastUp{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .locked{position:relative}
+  .locked .veil{position:absolute;inset:0;background:rgba(7,7,11,0.72);backdrop-filter:blur(3px);border-radius:inherit;display:flex;align-items:center;justify-content:center;z-index:10;padding:1rem;text-align:center}
+  .chip{border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05)}
+  .chip.active{background:#7c3aed;border-color:#7c3aed;color:#fff}
+</style>
 </head>
 <body class="pb-28">
 <div class="max-w-[640px] mx-auto px-3 pt-5">
+
   <div class="flex justify-between items-start mb-4">
-    <div><h1 class="text-[22px] font-black">RiskDesk <span class="text-violet-400">Pro</span> <span class="text-[10px] font-bold bg-violet-600 px-2 py-0.5 rounded-full ml-1">V10 SELLABLE</span></h1><div class="text-[11px] text-zinc-500">38 brokers • Stripe Ready • Prop Guard • BYO</div></div>
-    <div class="glass rounded-full p-1 flex text-[10px] font-bold"><button id="planFree" class="px-2.5 py-1.5 rounded-full bg-white text-black">Free</button><button id="planPro" class="px-2.5 py-1.5 rounded-full text-zinc-400">Pro $19</button><button id="planElite" class="px-2.5 py-1.5 rounded-full text-zinc-400">Elite $49</button></div>
+    <div>
+      <h1 class="text-[22px] font-black">RiskDesk <span class="text-violet-400">Pro</span> <span class="text-[10px] font-bold bg-violet-600 px-2 py-0.5 rounded-full ml-1">V11</span></h1>
+      <div class="text-[11px] text-zinc-500">38 brokers • Stripe ready • Prop Guard • BYO</div>
+    </div>
+    <div class="glass rounded-full p-1 flex text-[10px] font-bold">
+      <button id="planFree" class="px-2.5 py-1.5 rounded-full bg-white text-black">Free</button>
+      <button id="planPro" class="px-2.5 py-1.5 rounded-full text-zinc-400">Pro $19</button>
+      <button id="planElite" class="px-2.5 py-1.5 rounded-full text-zinc-400">Elite $49</button>
+    </div>
   </div>
 
+  <div id="tiltBanner" class="hidden glass rounded-2xl p-3 mb-3 border-amber-500/40">
+    <div class="flex items-center justify-between">
+      <div class="text-[12px] text-amber-300 font-semibold">⚠️ 3 losses in a row — consider a break</div>
+      <button id="tiltDismiss" class="text-amber-400 text-[16px] leading-none">×</button>
+    </div>
+  </div>
+
+  <!-- CONNECTION -->
   <div class="glass rounded-[20px] p-4 mb-3">
     <div class="flex gap-1 p-1 bg-black/50 rounded-full mb-3 text-[12px] font-bold">
       <button id="tabLive" class="flex-1 py-2.5 rounded-full bg-white text-black">🔌 Live MT</button>
@@ -23,12 +52,12 @@
 
     <div id="livePanel">
       <div id="liveDisconnected">
-        <p class="text-[12px] text-zinc-400 mb-3">Any MT4/MT5 broker - we read equity only. 38 brokers searchable, or custom.</p>
-        <label class="text-[10px] uppercase tracking-widest text-zinc-500">Search Broker</label>
+        <p class="text-[12px] text-zinc-400 mb-3">Any MT4/MT5 broker — we read equity only. 38 brokers searchable, or custom.</p>
+        <label class="text-[10px] uppercase tracking-widest text-zinc-500">Search broker</label>
         <div class="relative mt-1">
           <input id="brokerSearch" placeholder="Type: Exness, IC Markets, FTMO..." class="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-3.5 text-[13px] font-bold pr-10" autocomplete="off">
           <div class="absolute right-3 top-3.5 text-zinc-500">▼</div>
-          <div id="brokerList" class="hidden absolute z-50 w-full mt-1 bg-[#12121a] border border-white/10 rounded-xl max-h-[260px] overflow-auto shadow-2xl"></div>
+          <div id="brokerList" class="hidden absolute z-50 w-full mt-1 bg-[#12121a] border border-white/10 rounded-xl max-h-[280px] overflow-auto shadow-2xl"></div>
         </div>
         <div id="recentBrokers" class="flex gap-1.5 mt-2 flex-wrap"></div>
         <div class="grid grid-cols-2 gap-2 mt-3">
@@ -37,126 +66,585 @@
         </div>
         <div class="grid grid-cols-2 gap-2 mt-2">
           <input id="mtLogin" placeholder="Login 125904269" class="bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[13px] font-mono">
-          <input id="mtPass" type="password" placeholder="Investor pass - read-only safe" class="bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[13px]">
+          <input id="mtPass" type="password" placeholder="Investor pass — read-only" class="bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[13px]">
         </div>
-        <button id="openSheetBtn" class="w-full mt-3 bg-violet-600 hover:bg-violet-500 text-white py-3.5 rounded-full font-bold text-[14px]">Connect my account</button>
+        <button id="openSheetBtn" class="w-full mt-3 bg-violet-600 hover:bg-violet-500 text-white py-3.5 rounded-full font-bold text-[14px] tap">Connect my account</button>
       </div>
+
       <div id="liveConnected" class="hidden">
-        <div class="flex justify-between"><div><div class="flex items-center gap-2"><span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span><span id="connLabel" class="font-bold text-[13px]">Connected</span></div><div id="liveNums" class="text-[12px] text-zinc-400 mt-1">—</div><div id="lastUpd" class="text-[10px] text-zinc-600"></div></div><div class="flex flex-col gap-1"><button id="refreshBtn" class="bg-white text-black px-3 py-2 rounded-full text-[12px] font-bold">↻ Refresh</button><button id="changeBtn" class="text-[11px] text-zinc-500 underline">Change</button></div></div>
-        
-        <div id="propDash" class="mt-3 bg-black/40 rounded-2xl p-3 border border-amber-500/20">
-          <div class="flex justify-between items-center mb-2"><span class="text-[10px] uppercase tracking-widest text-amber-300">Prop Firm Daily Guard - Elite</span><span class="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">LIVE from MetaAPI</span></div>
+        <div class="flex justify-between">
+          <div>
+            <div class="flex items-center gap-2"><span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span><span id="connLabel" class="font-bold text-[13px]">Connected</span></div>
+            <div id="liveNums" class="text-[12px] text-zinc-400 mt-1">—</div>
+            <div id="lastUpd" class="text-[10px] text-zinc-600"></div>
+          </div>
+          <div class="flex flex-col gap-1">
+            <button id="refreshBtn" class="bg-white text-black px-3 py-2 rounded-full text-[12px] font-bold tap">↻ Refresh</button>
+            <button id="changeBtn" class="text-[11px] text-zinc-500 underline">Change</button>
+          </div>
+        </div>
+        <div id="marginCallBanner" class="hidden mt-3 bg-red-500/15 border border-red-500/40 rounded-xl px-3 py-2.5 text-[12px] text-red-300 font-semibold">Account in margin call — cannot calculate</div>
+
+        <div id="propDash" class="mt-3 bg-black/40 rounded-2xl p-3 border border-amber-500/20 locked">
+          <div class="flex justify-between items-center mb-2"><span class="text-[10px] uppercase tracking-widest text-amber-300">Prop firm daily guard</span><span class="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">LIVE from MetaAPI</span></div>
           <div class="grid grid-cols-2 gap-2">
             <div class="bg-black/50 rounded-xl p-2"><div class="text-[10px] text-zinc-500">Daily P&L</div><div id="dailyPnL" class="font-bold text-[14px]">$0.00</div></div>
-            <div class="bg-black/50 rounded-xl p-2"><div class="text-[10px] text-zinc-500">Daily Loss %</div><div id="dailyLossPct" class="font-bold text-[14px]">0.00%</div></div>
+            <div class="bg-black/50 rounded-xl p-2"><div class="text-[10px] text-zinc-500">Daily loss %</div><div id="dailyLossPct" class="font-bold text-[14px]">0.00%</div></div>
           </div>
-          <div class="mt-2"><div class="flex justify-between text-[10px] text-zinc-500"><span>0%</span><span>5% Daily Limit (FTMO/FundedNext)</span></div><div class="w-full bg-zinc-800 h-2 rounded-full mt-1 overflow-hidden"><div id="dailyBar" class="h-2 bg-emerald-500 rounded-full" style="width:0%"></div></div><div id="propStatus" class="mt-2 text-[11px] font-bold px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-300 inline-block">SAFE - Keep trading</div></div>
-          <!-- AFFILIATE CTAs -->
+          <div class="mt-2">
+            <div class="flex justify-between text-[10px] text-zinc-500"><span>0%</span><span>5% daily limit (FTMO/FundedNext)</span></div>
+            <div class="w-full bg-zinc-800 h-2 rounded-full mt-1 overflow-hidden"><div id="dailyBar" class="h-2 bg-emerald-500 rounded-full" style="width:0%"></div></div>
+            <div id="propStatus" class="mt-2 text-[11px] font-bold px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-300 inline-block">SAFE — keep trading</div>
+          </div>
           <div class="mt-3 grid grid-cols-2 gap-2">
-            <a id="ftmoLink" href="https://affiliate.ftmo.com/click?affiliate=YOUR_ID" target="_blank" class="bg-white text-black py-2 rounded-full text-[11px] font-bold text-center">FTMO 10% Off →</a>
-            <a id="fundedNextLink" href="https://fundednext.com/?ref=YOUR_ID" target="_blank" class="bg-amber-500 text-black py-2 rounded-full text-[11px] font-bold text-center">FundedNext 8% Off →</a>
+            <a id="ftmoLink" href="https://affiliate.ftmo.com/click?affiliate=YOUR_ID" target="_blank" class="bg-white text-black py-2.5 rounded-full text-[11px] font-bold text-center tap">FTMO — up to 20%<span class="block text-[9px] font-normal text-zinc-600">breached? new challenge →</span></a>
+            <a id="fundedNextLink" href="https://fundednext.com/?ref=YOUR_ID" target="_blank" class="bg-amber-500 text-black py-2.5 rounded-full text-[11px] font-bold text-center tap">FundedNext — 8-18%<span class="block text-[9px] font-normal text-zinc-800">90-day cookie →</span></a>
           </div>
-          <div class="text-[10px] text-zinc-500 text-center mt-1">Affiliate - you earn 8-20% per challenge</div>
+          <div class="text-[10px] text-zinc-500 text-center mt-1">Affiliate — you earn a commission per funded challenge sold</div>
           <div id="historyWarn" class="text-[10px] text-amber-300/70 mt-2 hidden"></div>
+          <div class="veil hidden" id="propVeil"><a href="https://buy.stripe.com/test_elite49_YOUR_LINK" target="_blank" class="bg-amber-500 text-black text-[12px] font-bold px-4 py-2.5 rounded-full tap">Unlock Elite — $49/mo</a></div>
         </div>
 
-        <!-- BROKER AFFILIATE -->
         <div class="mt-3 bg-violet-500/5 rounded-2xl p-3 border border-violet-500/20">
-          <div class="text-[10px] uppercase tracking-widest text-violet-300">Recommended Brokers - Low Spread</div>
+          <div class="text-[10px] uppercase tracking-widest text-violet-300">Recommended brokers — low spread</div>
           <div class="flex gap-2 mt-2">
-            <a href="https://affiliates.exness.com/YOUR_ID" target="_blank" class="flex-1 bg-black/40 border border-white/10 rounded-xl p-2 text-center"><div class="font-bold text-[11px]">Exness</div><div class="text-[9px] text-zinc-500">$1 Daily Payout</div></a>
-            <a href="https://icmarkets.com/?camp=YOUR_ID" target="_blank" class="flex-1 bg-black/40 border border-white/10 rounded-xl p-2 text-center"><div class="font-bold text-[11px]">IC Markets</div><div class="text-[9px] text-zinc-500">Raw $0.0</div></a>
-            <a href="https://pepperstone.com/YOUR_ID" target="_blank" class="flex-1 bg-black/40 border border-white/10 rounded-xl p-2 text-center"><div class="font-bold text-[11px]">Pepperstone</div><div class="text-[9px] text-zinc-500">365d cookie</div></a>
+            <a href="https://affiliates.exness.com/YOUR_ID" target="_blank" class="flex-1 bg-black/40 border border-white/10 rounded-xl p-2 text-center tap"><div class="font-bold text-[11px]">Exness</div><div class="text-[9px] text-zinc-500">$1 daily payout</div></a>
+            <a href="https://icmarkets.com/?camp=YOUR_ID" target="_blank" class="flex-1 bg-black/40 border border-white/10 rounded-xl p-2 text-center tap"><div class="font-bold text-[11px]">IC Markets</div><div class="text-[9px] text-zinc-500">Raw ECN</div></a>
+            <a href="https://pepperstone.com/YOUR_ID" target="_blank" class="flex-1 bg-black/40 border border-white/10 rounded-xl p-2 text-center tap"><div class="font-bold text-[11px]">Pepperstone</div><div class="text-[9px] text-zinc-500">365d cookie</div></a>
           </div>
         </div>
       </div>
     </div>
 
     <div id="demoPanel" class="hidden">
-      <p class="text-[12px] text-zinc-400 mb-3">No MT? Practice manually - demo fallback fixes $0.0000 bug.</p>
-      <div class="grid grid-cols-2 gap-2"><div><label class="text-[10px] uppercase text-zinc-500">Demo Balance</label><input id="demoBal" type="number" value="10000" class="w-full mt-1 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[14px] font-bold"></div><div><label class="text-[10px] uppercase text-zinc-500">Demo Equity</label><input id="demoEq" type="number" value="10000" class="w-full mt-1 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[14px] font-bold"></div></div>
+      <p class="text-[12px] text-zinc-400 mb-3">No MT? Practice manually — demo fallback fixes the $0.0000 bug.</p>
+      <div class="grid grid-cols-2 gap-2">
+        <div><label class="text-[10px] uppercase text-zinc-500">Demo balance</label><input id="demoBal" type="number" value="10000" class="w-full mt-1 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[14px] font-bold"></div>
+        <div><label class="text-[10px] uppercase text-zinc-500">Demo equity</label><input id="demoEq" type="number" value="10000" class="w-full mt-1 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[14px] font-bold"></div>
+      </div>
       <input id="demoSlider" type="range" min="500" max="100000" step="500" value="10000" class="w-full mt-3 accent-violet-600">
     </div>
   </div>
 
+  <!-- CALCULATOR -->
   <div class="glass rounded-[20px] p-4 mb-3">
     <div class="grid grid-cols-2 gap-3">
       <div><label class="text-[10px] uppercase text-zinc-500">Symbol</label><input id="symbol" value="XAUUSD" class="w-full mt-1 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[14px] font-bold"></div>
       <div><label class="text-[10px] uppercase text-zinc-500">Base</label><select id="mode" class="w-full mt-1 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[14px]"><option value="equity" selected>Equity</option><option value="balance">Balance</option></select></div>
       <div class="col-span-2"><label class="text-[10px] uppercase text-zinc-500">Risk % <span id="riskVal" class="text-violet-400 font-bold">1.0%</span></label><input id="riskPct" type="range" min="0.1" max="5" step="0.1" value="1" class="w-full mt-2"></div>
       <div><label class="text-[10px] uppercase text-zinc-500">SL pips</label><input id="sl" type="number" value="15" class="w-full mt-1 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[14px]"></div>
-      <div><label class="text-[10px] uppercase text-zinc-500">Pip value / lot</label><input id="pipRate" type="number" value="10" class="w-full mt-1 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[14px]"></div>
+      <div><label class="text-[10px] uppercase text-zinc-500">Target pips</label><input id="tp" type="number" value="30" class="w-full mt-1 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[14px]"></div>
+      <div class="col-span-2"><label class="text-[10px] uppercase text-zinc-500">Pip value / lot</label><input id="pipRate" type="number" value="10" class="w-full mt-1 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[14px]"></div>
     </div>
-    <div class="flex gap-1.5 mt-3 flex-wrap"><button data-pre="XAUUSD,15" class="preS text-[11px] px-3 py-1.5 rounded-full bg-white/5 border border-white/10">XAU 15p</button><button data-pre="EURUSD,10" class="preS text-[11px] px-3 py-1.5 rounded-full bg-white/5 border border-white/10">EU 10p</button><button data-pre="GBPUSD,12" class="preS text-[11px] px-3 py-1.5 rounded-full bg-white/5 border border-white/10">GU 12p</button><button data-pre="BTCUSD,300" class="preS text-[11px] px-3 py-1.5 rounded-full bg-white/5 border border-white/10">BTC 300p</button></div>
+    <div class="flex gap-1.5 mt-3 flex-wrap">
+      <button data-pre="XAUUSD,15" class="preS text-[11px] px-3 py-1.5 rounded-full bg-white/5 border border-white/10">XAU 15p</button>
+      <button data-pre="EURUSD,10" class="preS text-[11px] px-3 py-1.5 rounded-full bg-white/5 border border-white/10">EU 10p</button>
+      <button data-pre="GBPUSD,12" class="preS text-[11px] px-3 py-1.5 rounded-full bg-white/5 border border-white/10">GU 12p</button>
+      <button data-pre="BTCUSD,300" class="preS text-[11px] px-3 py-1.5 rounded-full bg-white/5 border border-white/10">BTC 300p</button>
+    </div>
+    <div class="text-[10px] uppercase tracking-widest text-zinc-500 mt-3 mb-1">Setup (tags this trade)</div>
+    <div class="flex gap-1.5 flex-wrap">
+      <button data-setup="Breakout" class="setupBtn chip text-[11px] px-3 py-1.5 rounded-full">Breakout</button>
+      <button data-setup="Reversal" class="setupBtn chip text-[11px] px-3 py-1.5 rounded-full">Reversal</button>
+      <button data-setup="News" class="setupBtn chip text-[11px] px-3 py-1.5 rounded-full">News</button>
+      <button data-setup="Other" class="setupBtn chip text-[11px] px-3 py-1.5 rounded-full">Other</button>
+    </div>
   </div>
 
+  <!-- RESULT -->
   <div class="glass glow rounded-[28px] p-5 mb-3 border-violet-500/20">
-    <div class="flex justify-between"><div class="text-[11px] uppercase tracking-widest text-zinc-500">Lot - 0.0025 FIXED</div><div id="baseBadge" class="text-[10px] px-2 py-1 rounded-full bg-amber-500/20 text-amber-300">DEMO $10k</div></div>
+    <div class="flex justify-between"><div class="text-[11px] uppercase tracking-widest text-zinc-500">Lot — 0.0025 min</div><div id="baseBadge" class="text-[10px] px-2 py-1 rounded-full bg-amber-500/20 text-amber-300">DEMO $10k</div></div>
     <div id="lot" class="text-[54px] font-black tracking-tight">0.0667</div>
-    <div class="grid grid-cols-3 gap-2 mt-4">
+    <div id="lotWarning" class="hidden text-[11px] text-amber-400 -mt-1 mb-1">Below min lot — rounded up to 0.0025.</div>
+    <div class="grid grid-cols-2 gap-2 mt-4">
       <div class="bg-black/40 rounded-2xl p-2.5"><div class="text-[10px] text-zinc-500">Risk $</div><div id="riskAmt" class="font-bold text-[14px]">$100</div></div>
-      <div class="bg-black/40 rounded-2xl p-2.5"><div class="text-[10px] text-zinc-500">RR + BE</div><div id="rrBe" class="font-bold text-[11px]">1:2 • 33% BE</div></div>
+      <div class="bg-black/40 rounded-2xl p-2.5"><div class="text-[10px] text-zinc-500">Reward $</div><div id="rewardAmt" class="font-bold text-[14px] text-emerald-400">$200</div></div>
+      <div class="bg-black/40 rounded-2xl p-2.5"><div class="text-[10px] text-zinc-500">RR + breakeven</div><div id="rrBe" class="font-bold text-[12px]">1:2 • 33% BE</div></div>
       <div class="bg-black/40 rounded-2xl p-2.5"><div class="text-[10px] text-zinc-500">Base</div><div id="baseUsed" class="font-bold text-[11px]">demo $10k</div></div>
     </div>
-    <button id="saveTrade" class="w-full mt-4 bg-white text-black py-3 rounded-full font-bold text-[13px]">+ Save Trade</button>
+    <button id="saveTrade" class="w-full mt-4 bg-white text-black py-3 rounded-full font-bold text-[13px] tap">+ Save trade</button>
+    <div id="freeCapNote" class="hidden text-[11px] text-amber-400 text-center mt-2">Free plan holds 5 trades — upgrade to Pro for unlimited.</div>
   </div>
 
+  <!-- ANALYTICS (PRO) -->
+  <div class="glass rounded-[20px] p-4 mb-3 locked" id="analyticsCard">
+    <div class="flex justify-between items-center mb-2"><span class="text-[11px] uppercase tracking-widest text-zinc-400">Journal analytics</span><span class="text-[10px] px-2 py-1 rounded-full bg-violet-500/20 text-violet-300">Pro</span></div>
+    <div class="grid grid-cols-3 gap-2">
+      <div class="bg-black/40 rounded-xl p-2"><div class="text-[10px] text-zinc-500">Win rate</div><div id="winRateVal" class="font-bold text-[13px]">—</div></div>
+      <div class="bg-black/40 rounded-xl p-2"><div class="text-[10px] text-zinc-500">Expectancy</div><div id="expectancyVal" class="font-bold text-[13px]">—</div></div>
+      <div class="bg-black/40 rounded-xl p-2"><div class="text-[10px] text-zinc-500">Discipline</div><div id="disciplineVal" class="font-bold text-[13px]">—</div></div>
+    </div>
+    <div id="setupWinRates" class="text-[11px] text-zinc-500 mt-2"></div>
+    <div class="veil hidden" id="analyticsVeil"><button class="upgradeBtn bg-violet-600 text-white text-[12px] font-bold px-4 py-2.5 rounded-full tap">Unlock analytics — $19/mo</button></div>
+  </div>
+
+  <!-- PLAYBOOK (PRO/ELITE) -->
+  <div class="glass rounded-[20px] p-4 mb-3 locked" id="playbookCard">
+    <div class="flex justify-between items-center mb-2"><span class="text-[11px] uppercase tracking-widest text-zinc-400">Playbook</span><span class="text-[10px] px-2 py-1 rounded-full bg-violet-500/20 text-violet-300">Pro</span></div>
+    <div class="flex gap-2 mb-2">
+      <input id="playbookInput" placeholder="e.g. London open breakout, XAU only" class="flex-1 bg-black/40 border border-white/10 rounded-xl px-3 py-2.5 text-[12px]">
+      <button id="playbookAdd" class="bg-white/10 px-3 rounded-xl text-[12px] font-bold tap">Add</button>
+      <button id="screenshotBtn" class="bg-white/5 px-3 rounded-xl text-[14px]" title="Screenshot upload — Elite">📷</button>
+    </div>
+    <div id="playbookList" class="flex flex-col gap-1.5"></div>
+    <div class="veil hidden" id="playbookVeil"><button class="upgradeBtn bg-violet-600 text-white text-[12px] font-bold px-4 py-2.5 rounded-full tap">Unlock playbook — $19/mo</button></div>
+  </div>
+
+  <!-- JOURNAL -->
   <div class="glass rounded-[20px] p-4 mb-3">
     <div class="flex justify-between items-center mb-2"><span class="text-[11px] uppercase tracking-widest text-zinc-400">Journal (<span id="jCount">0</span>)</span><div class="flex gap-1"><button id="exportCsv" class="text-[11px] px-2 py-1 rounded-full bg-white/10">CSV</button><button id="clearJ" class="text-[11px] px-2 py-1 rounded-full bg-red-500/20 text-red-300">Clear</button></div></div>
-    <div id="jEmpty" class="text-[11px] text-zinc-500 text-center py-6">No trades - save first calc. Pre-filled demo for calc.</div>
-    <div id="jList" class="space-y-1.5 max-h-[220px] overflow-auto"></div>
+    <div id="jEmpty" class="text-[11px] text-zinc-500 text-center py-6">No trades yet — save a calc above. Tap a saved trade to log its outcome.</div>
+    <div id="jList" class="space-y-1.5 max-h-[280px] overflow-auto"></div>
   </div>
 
+  <!-- PACKS -->
   <div class="glass rounded-[20px] p-4 mb-3">
-    <div class="text-[11px] uppercase tracking-widest text-zinc-400 mb-3">Packs - Stripe Ready</div>
+    <div class="text-[11px] uppercase tracking-widest text-zinc-400 mb-3">Packs — Stripe ready</div>
     <div class="grid gap-2">
-      <div class="bg-black/40 rounded-2xl p-3 border border-white/5"><div class="flex justify-between"><span class="font-bold text-[13px]">Free - Core</span><span class="text-[10px] px-2 py-1 rounded-full bg-zinc-700">FREE</span></div><div class="text-[11px] text-zinc-400 mt-1">38 brokers + Demo $10k fallback + 0.0025 fix + 5 trades + RR</div></div>
-      <div class="bg-violet-500/10 rounded-2xl p-3 border border-violet-500/30"><div class="flex justify-between"><span class="font-bold text-[13px]">Pro - $19/mo</span><span class="text-[10px] px-2 py-1 rounded-full bg-violet-600 text-white">POPULAR</span></div><div class="text-[11px] text-zinc-300 mt-1">Unlimited + CSV + Presets + Risk Guard + Setup tags</div><a id="stripePro" href="https://buy.stripe.com/test_pro19_YOUR_LINK" target="_blank" class="block w-full mt-2 bg-violet-600 py-2.5 rounded-full text-[12px] font-bold text-center">Upgrade $19/mo - Stripe</a></div>
-      <div class="bg-amber-500/5 rounded-2xl p-3 border border-amber-500/20"><div class="flex justify-between"><span class="font-bold text-[13px]">Elite - $49/mo</span><span class="text-[10px] px-2 py-1 rounded-full bg-amber-500/20 text-amber-300">AI + PROP</span></div><div class="text-[11px] text-zinc-400 mt-1">Pro + Daily loss guard 5% bar + AI analysis + Equity curve + Prop compliance + Discord</div><a id="stripeElite" href="https://buy.stripe.com/test_elite49_YOUR_LINK" target="_blank" class="block w-full mt-2 bg-white text-black py-2.5 rounded-full text-[12px] font-bold text-center">Join Elite $49/mo - Stripe</a></div>
+      <div class="bg-black/40 rounded-2xl p-3 border border-white/5"><div class="flex justify-between"><span class="font-bold text-[13px]">Free — Core</span><span class="text-[10px] px-2 py-1 rounded-full bg-zinc-700">FREE</span></div><div class="text-[11px] text-zinc-400 mt-1">38 brokers + demo $10k fallback + 0.0025 min + 5 trades + basic RR</div></div>
+      <div class="bg-violet-500/10 rounded-2xl p-3 border border-violet-500/30"><div class="flex justify-between"><span class="font-bold text-[13px]">Pro — $19/mo</span><span class="text-[10px] px-2 py-1 rounded-full bg-violet-600 text-white">POPULAR</span></div><div class="text-[11px] text-zinc-300 mt-1">Unlimited journal + CSV export + presets + Risk Guard + setup tags + analytics + playbook</div><a id="stripePro" href="https://buy.stripe.com/test_pro19_YOUR_LINK" target="_blank" class="block w-full mt-2 bg-violet-600 py-2.5 rounded-full text-[12px] font-bold text-center tap">Upgrade $19/mo — Stripe</a></div>
+      <div class="bg-amber-500/5 rounded-2xl p-3 border border-amber-500/20"><div class="flex justify-between"><span class="font-bold text-[13px]">Elite — $49/mo</span><span class="text-[10px] px-2 py-1 rounded-full bg-amber-500/20 text-amber-300">AI + PROP</span></div><div class="text-[11px] text-zinc-400 mt-1">Pro + prop daily-loss guard + AI risk analysis + Discord</div><a id="stripeElite" href="https://buy.stripe.com/test_elite49_YOUR_LINK" target="_blank" class="block w-full mt-2 bg-white text-black py-2.5 rounded-full text-[12px] font-bold text-center tap">Join Elite $49/mo — Stripe</a></div>
     </div>
-    <div class="text-[10px] text-zinc-500 text-center mt-2">Replace test_... links with real Stripe Payment Links from Dashboard. After payment ?success=true unlocks via localStorage.</div>
+    <div class="text-[10px] text-zinc-500 text-center mt-2">Replace test_... links with real Stripe Payment Links. Set each link's after-payment redirect URL to include ?success=true&tier=pro (or tier=elite) so this page knows which plan to unlock.</div>
   </div>
 
-  <div class="text-[10px] text-zinc-600 text-center pb-6">Not financial advice. Educational tool. Investor pass read-only. 38 brokers. V10 ready to sell - no Claude needed.</div>
+  <!-- AI RISK ANALYSIS (ELITE) -->
+  <div class="glass rounded-[20px] p-4 mb-3 locked" id="aiCard">
+    <div class="flex justify-between items-center mb-2"><span class="text-[11px] uppercase tracking-widest text-zinc-400">AI risk analysis</span><span class="text-[10px] px-2 py-1 rounded-full bg-amber-500/20 text-amber-300">Elite</span></div>
+    <div id="aiInsights" class="text-[12px] text-zinc-300 flex flex-col gap-1.5"></div>
+    <div class="text-[10px] text-zinc-600 mt-2">Pattern analysis computed from your own journal — not a live model call.</div>
+    <div class="veil hidden" id="aiVeil"><button class="upgradeBtn bg-amber-500 text-black text-[12px] font-bold px-4 py-2.5 rounded-full tap">Unlock Elite — $49/mo</button></div>
+  </div>
+
+  <!-- TESTIMONIAL -->
+  <div class="glass rounded-[20px] p-4 mb-3">
+    <div class="text-[11px] uppercase tracking-widest text-zinc-500 mb-2">What traders say</div>
+    <div class="text-[13px] text-zinc-300 italic">"Finally a lot size calculator that actually reads my real equity instead of me typing it in wrong at 2am." — placeholder quote, swap for a real one once you have users.</div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="glass rounded-[20px] p-4 mb-3">
+    <div class="text-[11px] uppercase tracking-widest text-zinc-500 mb-2">FAQ</div>
+    <div class="flex flex-col gap-3 text-[12px]">
+      <div><div class="font-bold text-zinc-200">Is my password safe?</div><div class="text-zinc-500">Use your investor (read-only) password. It's sent over HTTPS to provision a MetaAPI connection and is never stored in the browser.</div></div>
+      <div><div class="font-bold text-zinc-200">Can this place trades for me?</div><div class="text-zinc-500">No. RiskDesk only reads balance/equity and calculates a lot size — it never sends trade orders.</div></div>
+      <div><div class="font-bold text-zinc-200">Which brokers work?</div><div class="text-zinc-500">Any MT4 or MT5 broker. Pick from 38 preloaded brokers or enter a custom server.</div></div>
+      <div><div class="font-bold text-zinc-200">Can I cancel Pro or Elite?</div><div class="text-zinc-500">Yes, subscriptions are managed through Stripe and can be cancelled anytime.</div></div>
+    </div>
+  </div>
+
+  <div class="text-[10px] text-zinc-600 text-center pb-6">Not financial advice. Educational tool. Investor password read-only. 38 brokers. Lot sizing only — RiskDesk never places trades.</div>
 </div>
 
-<div id="sheet" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/70"></div><div class="absolute bottom-0 left-0 right-0 bg-[#101018] rounded-t-[24px] p-4 sheet-enter border-t border-white/10 max-w-[640px] mx-auto"><div class="w-10 h-1 bg-white/20 rounded-full mx-auto mb-4"></div><div class="text-[14px] font-bold mb-3">Connect <span id="sheetBrokerName">TradeQuo</span></div><div id="sheetStatus" class="text-[12px] text-zinc-400 mb-3">First connect 15-30s provisioning</div><button id="btnConnect" class="w-full bg-violet-600 py-3.5 rounded-full font-bold">Connect & Pull Equity</button><button id="closeSheet" class="w-full mt-2 bg-white/10 py-3 rounded-full font-bold">Cancel</button></div></div>
+<div id="toastWrap" class="fixed bottom-4 left-0 right-0 flex justify-center z-50 pointer-events-none"></div>
+
+<div id="sheet" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-black/70"></div>
+  <div class="absolute bottom-0 left-0 right-0 bg-[#101018] rounded-t-[24px] p-4 sheet-enter border-t border-white/10 max-w-[640px] mx-auto">
+    <div class="w-10 h-1 bg-white/20 rounded-full mx-auto mb-4"></div>
+    <div class="text-[14px] font-bold mb-3">Connect <span id="sheetBrokerName">TradeQuo</span></div>
+    <div id="sheetStatus" class="text-[12px] text-zinc-400 mb-3">First connect takes 15-30s while your account is provisioned.</div>
+    <button id="btnConnect" class="w-full bg-violet-600 py-3.5 rounded-full font-bold tap">Connect & pull equity</button>
+    <button id="closeSheet" class="w-full mt-2 bg-white/10 py-3 rounded-full font-bold tap">Cancel</button>
+  </div>
+</div>
 
 <script>
-const SUPA_URL="https://zvtjrjnadvajmambsgre.supabase.co"; const ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp2dGpyam5hZHZham1hbWJzZ3JlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxOTEzMzQsImV4cCI6MjEwMTc2NzMzNH0.LwAghCC_AZjZy9sHb3eBl4WSrn7SViKi6q2KAJep8e8";
-const BROKERS=[{name:"TradeQuo",servers:["TradeQuo-Server","TradeQuo-Demo"]},{name:"Exness",servers:["Exness-Real","Exness-Real2","Exness-Real3","Exness-Real4","Exness-Real5","Exness-Trial"]},{name:"IC Markets",servers:["ICMarkets-Demo","ICMarkets-Live","ICMarketsAU-Live"]},{name:"Pepperstone",servers:["Pepperstone-Demo","Pepperstone-Live","Pepperstone-Edge"]},{name:"FTMO",servers:["FTMO-Server","FTMO-Server2","FTMO-Demo"]},{name:"Deriv",servers:["Deriv-Server","Deriv-Real","Deriv-Demo"]},{name:"XM",servers:["XMGlobal-MT5","XMGlobal-Real 36","XM.COM-Real"]},{name:"RoboForex",servers:["RoboForex-Pro","RoboForex-ECN","RoboForex-Prime"]},{name:"FXTM",servers:["ForexTimeFXTM-ECN","ForexTimeFXTM-Live01"]},{name:"AvaTrade",servers:["Ava-Real 1","Ava-Real 2","Ava-Demo"]},{name:"Tickmill",servers:["Tickmill-Live","Tickmill-Demo","TickmillUK-Live"]},{name:"OctaFX",servers:["OctaFX-Real","OctaFX-Demo"]},{name:"HFM",servers:["HFMarketsGlobal-Demo","HFMarkets-Live"]},{name:"FP Markets",servers:["FPMarkets-Live","FPMarkets-Demo"]},{name:"Axi",servers:["AxiTrader-US03-Live"]},{name:"OANDA",servers:["OANDA-Real","OANDA-Demo"]},{name:"Forex.com",servers:["FOREXCOM-MT5Live01","GAINCapital-Live"]},{name:"Admirals",servers:["AdmiralMarkets-Live"]},{name:"FXCM",servers:["FXCM-Real01"]},{name:"FxPro",servers:["FxPro.com-Real01"]},{name:"Eightcap",servers:["Eightcap-Real"]},{name:"Vantage",servers:["VantageInternational-Live"]},{name:"FundedNext",servers:["FundedNext-Server"]},{name:"The5ers",servers:["The5ers-Real"]},{name:"MyFundedFX",servers:["SeacrestFunded-Real"]},{name:"E8 Funding",servers:["E8Funding-Server"]},{name:"BlackBull",servers:["BlackBullMarkets-Live"]},{name:"TMGM",servers:["TMGM.Trade-Live"]},{name:"Fusion Markets",servers:["FusionMarkets-Live"]},{name:"LiteForex",servers:["LiteForex-Real"]},{name:"InstaForex",servers:["InstaForex-1Real"]},{name:"JustMarkets",servers:["JustMarkets-Live"]},{name:"FBS",servers:["FBS-Real"]},{name:"Custom",servers:["Enter manually"]}];
-let state={balance:10000,equity:10000,freeMargin:10000,marginLevel:0,dailyPnL:0,dailyLossPct:0,isDailyLossBreached:false}; let isLive=false; let curPlat='mt5'; let curMode='demo';
-function fmtLot(x){if(!x||x<=0)return"0.0025";if(x<0.0025)return"0.0025";if(x<0.01)return x.toFixed(4);if(x<0.1)return x.toFixed(3);return x.toFixed(2);}
-function getBase(){if(curMode==='live'&&isLive&&state.equity>0)return document.getElementById('mode').value==='balance'?state.balance:state.equity;return parseFloat(document.getElementById('demoEq').value)||10000;}
-function calc(){const rp=parseFloat(document.getElementById('riskPct').value)||1;const sl=parseFloat(document.getElementById('sl').value)||15;const pr=parseFloat(document.getElementById('pipRate').value)||10;let base=getBase();const risk=base*(rp/100);let lot=risk/(sl*pr);if(lot<0.0025)lot=0.0025;document.getElementById('lot').textContent=fmtLot(lot);document.getElementById('riskAmt').textContent=`$${risk.toFixed(2)}`;document.getElementById('baseUsed').textContent=`${document.getElementById('mode').value} $${base.toFixed(0)}`;document.getElementById('baseBadge').textContent=(curMode==='live'&&isLive&&state.equity>0)?`LIVE $${base.toFixed(0)}`:`DEMO $${base.toFixed(0)}`;const rr=2;const be=(1/(1+rr))*100;document.getElementById('rrBe').textContent=`1:${rr} • ${be.toFixed(0)}% BE`;window._lastCalc={symbol:document.getElementById('symbol').value,lot:fmtLot(lot),riskPct:rp,sl,riskAmt:`$${risk.toFixed(2)}`,base:base.toFixed(0)};}
-function money(n){return `$${Number(n||0).toFixed(2)}`;}
-const brokerInput=document.getElementById('brokerSearch');const brokerList=document.getElementById('brokerList');const mtServer=document.getElementById('mtServer');
-function renderBrokers(f=""){const fl=f.toLowerCase();const list=BROKERS.filter(b=>!f||b.name.toLowerCase().includes(fl)||b.servers.some(s=>s.toLowerCase().includes(fl))).slice(0,30);brokerList.innerHTML=list.map(b=>`<div class="p-3 hover:bg-white/5 cursor-pointer flex justify-between" data-name="${b.name}" data-server="${b.servers[0]}"><div><div class="font-bold text-[13px]">${b.name}</div><div class="text-[11px] text-zinc-500">${b.servers[0]}</div></div><div class="text-[10px] text-zinc-600 self-center">${b.servers.length} srvs</div></div>`).join('');brokerList.querySelectorAll('div[data-name]').forEach(el=>{el.onclick=()=>{brokerInput.value=el.dataset.name;mtServer.value=el.dataset.server;document.getElementById('sheetBrokerName').textContent=el.dataset.name;brokerList.classList.add('hidden');addRecent(el.dataset.name,el.dataset.server);};});}
-brokerInput.onfocus=()=>{renderBrokers(brokerInput.value);brokerList.classList.remove('hidden');};brokerInput.oninput=()=>{renderBrokers(brokerInput.value);brokerList.classList.remove('hidden');};document.addEventListener('click',e=>{if(!e.target.closest('#brokerSearch')&&!e.target.closest('#brokerList'))brokerList.classList.add('hidden');});
-function addRecent(n,s){let r=JSON.parse(localStorage.getItem('rd_recent')||'[]');r=r.filter(x=>x.name!==n);r.unshift({name:n,srv:s});r=r.slice(0,4);localStorage.setItem('rd_recent',JSON.stringify(r));renderRecent();}
-function renderRecent(){let r=JSON.parse(localStorage.getItem('rd_recent')||'[]');document.getElementById('recentBrokers').innerHTML=r.map(x=>`<button class="recent text-[11px] px-2.5 py-1 rounded-full bg-white/10 border border-white/10" data-srv="${x.srv}" data-name="${x.name}">${x.name}</button>`).join('');document.querySelectorAll('.recent').forEach(b=>b.onclick=()=>{brokerInput.value=b.dataset.name;mtServer.value=b.dataset.srv;document.getElementById('sheetBrokerName').textContent=b.dataset.name;});}
+// ====== BACKEND — UNCHANGED ======
+const SUPA_URL="https://zvtjrjnadvajmambsgre.supabase.co";
+const ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp2dGpyam5hZHZham1hbWJzZ3JlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxOTEzMzQsImV4cCI6MjEwMTc2NzMzNH0.LwAghCC_AZjZy9sHb3eBl4WSrn7SViKi6q2KAJep8e8";
+
+// ====== BROKER UNIVERSE (38) ======
+const BROKERS=[
+{name:"TradeQuo",servers:["TradeQuo-Server","TradeQuo-Demo"]},
+{name:"Exness",servers:["Exness-Real","Exness-Real2","Exness-Real3","Exness-Real4","Exness-Real5","Exness-Trial"]},
+{name:"IC Markets",servers:["ICMarkets-Demo","ICMarkets-Live","ICMarketsAU-Live","ICMarketsSC-Live"]},
+{name:"Pepperstone",servers:["Pepperstone-Demo","Pepperstone-Live","Pepperstone-Edge","PepperstoneUK-Live"]},
+{name:"FTMO",servers:["FTMO-Server","FTMO-Server2","FTMO-Demo"]},
+{name:"Deriv",servers:["Deriv-Server","Deriv-Real","Deriv-Demo"]},
+{name:"XM",servers:["XMGlobal-MT5","XMGlobal-Real 36","XM.COM-Real","XMGlobal-Demo"]},
+{name:"RoboForex",servers:["RoboForex-Pro","RoboForex-ECN","RoboForex-Prime","RoboForex-Demo"]},
+{name:"FXTM",servers:["ForexTimeFXTM-ECN","ForexTimeFXTM-Live01"]},
+{name:"AvaTrade",servers:["Ava-Real 1","Ava-Real 2","Ava-Demo"]},
+{name:"Tickmill",servers:["Tickmill-Live","Tickmill-Demo","TickmillUK-Live"]},
+{name:"OctaFX",servers:["OctaFX-Real","OctaFX-Demo"]},
+{name:"HFM",servers:["HFMarketsGlobal-Demo","HFMarkets-Live"]},
+{name:"FP Markets",servers:["FPMarkets-Live","FPMarkets-Demo"]},
+{name:"Axi",servers:["AxiTrader-US03-Live"]},
+{name:"OANDA",servers:["OANDA-Real","OANDA-Demo"]},
+{name:"Forex.com",servers:["FOREXCOM-MT5Live01","GAINCapital-Live"]},
+{name:"Admirals",servers:["AdmiralMarkets-Live","AdmiralMarkets-Demo"]},
+{name:"FXCM",servers:["FXCM-Real01","FXCM-Demo01"]},
+{name:"FxPro",servers:["FxPro.com-Real01","FxPro.com-Demo01"]},
+{name:"Eightcap",servers:["Eightcap-Real","Eightcap-Demo"]},
+{name:"Vantage",servers:["VantageInternational-Live","VantageInternational-Demo"]},
+{name:"FundedNext",servers:["FundedNext-Server"]},
+{name:"The5ers",servers:["The5ers-Real"]},
+{name:"MyFundedFX",servers:["SeacrestFunded-Real"]},
+{name:"E8 Funding",servers:["E8Funding-Server"]},
+{name:"BlackBull",servers:["BlackBullMarkets-Live"]},
+{name:"TMGM",servers:["TMGM.Trade-Live"]},
+{name:"Fusion Markets",servers:["FusionMarkets-Live"]},
+{name:"LiteForex",servers:["LiteForex-Real"]},
+{name:"InstaForex",servers:["InstaForex-1Real"]},
+{name:"JustMarkets",servers:["JustMarkets-Live"]},
+{name:"FBS",servers:["FBS-Real"]},
+{name:"Custom",servers:["Enter manually"]}
+];
+const PROP_FIRMS=new Set(["FTMO","FundedNext","The5ers","MyFundedFX","E8 Funding"]);
+const ECN_BROKERS=new Set(["IC Markets","Pepperstone","FP Markets","Tickmill","Fusion Markets","Eightcap","BlackBull","Vantage","FxPro","Axi","RoboForex"]);
+function brokerType(n){ return PROP_FIRMS.has(n)?'Prop':ECN_BROKERS.has(n)?'ECN':'MM'; }
+function brokerBadgeClass(t){ return t==='Prop'?'bg-amber-500/20 text-amber-300':t==='ECN'?'bg-emerald-500/20 text-emerald-300':'bg-zinc-700 text-zinc-300'; }
+
+let state={balance:10000,equity:10000,freeMargin:10000,marginLevel:0,dailyPnL:0,dailyLossPct:0,isDailyLossBreached:false,historyWarning:null};
+let isLive=false, curPlat='mt5', curMode='demo', curSetup=null;
+let plan='free';
+
+function fmtLot(x){ if(!x||x<=0) return "0.0025"; if(x<0.0025) return "0.0025"; if(x<0.01) return x.toFixed(4); if(x<0.1) return x.toFixed(3); return x.toFixed(2); }
+function money(n){ const v=Number(n||0); return `${v<0?'-':''}$${Math.abs(v).toFixed(2)}`; }
+function getBase(){ if(curMode==='live'&&isLive&&state.equity>0) return document.getElementById('mode').value==='balance'?state.balance:state.equity; return parseFloat(document.getElementById('demoEq').value)||10000; }
+
+function calc(){
+  const rp=parseFloat(document.getElementById('riskPct').value)||1;
+  const sl=parseFloat(document.getElementById('sl').value)||15;
+  const tp=parseFloat(document.getElementById('tp').value)||0;
+  const pr=parseFloat(document.getElementById('pipRate').value)||10;
+
+  const marginCall = curMode==='live' && isLive && state.equity<=0 && localStorage.getItem('rd_user_account');
+  document.getElementById('marginCallBanner').classList.toggle('hidden', !marginCall);
+  if(marginCall){
+    document.getElementById('lot').textContent='—'; document.getElementById('riskAmt').textContent='—';
+    document.getElementById('rewardAmt').textContent='—'; document.getElementById('rrBe').textContent='—';
+    document.getElementById('baseUsed').textContent='Account in margin call — cannot calculate';
+    document.getElementById('lotWarning').classList.add('hidden');
+    return;
+  }
+
+  const base=getBase();
+  const risk=base*(rp/100);
+  const rawLot=risk/(sl*pr);
+  const lot=Math.max(rawLot,0.0025);
+  document.getElementById('lotWarning').classList.toggle('hidden', rawLot>=0.0025);
+  document.getElementById('lot').textContent=fmtLot(lot);
+  document.getElementById('riskAmt').textContent=`$${risk.toFixed(2)}`;
+
+  const rewardUsd = lot*tp*pr;
+  const rr = sl>0 ? (tp/sl) : 0;
+  const be = rr>0 ? (1/(1+rr))*100 : 0;
+  document.getElementById('rewardAmt').textContent = money(rewardUsd);
+  document.getElementById('rrBe').textContent = `1:${rr.toFixed(1)} • ${be.toFixed(0)}% BE`;
+
+  document.getElementById('baseUsed').textContent=`${document.getElementById('mode').value} $${base.toFixed(0)}`;
+  document.getElementById('baseBadge').textContent=(curMode==='live'&&isLive&&state.equity>0)?`LIVE $${base.toFixed(0)}`:`DEMO $${base.toFixed(0)}`;
+
+  window._lastCalc={symbol:document.getElementById('symbol').value||'—', lot:fmtLot(lot), riskPct:rp, sl, tp, riskAmt:`$${risk.toFixed(2)}`, base:base.toFixed(0), setup:curSetup};
+}
+
+// ---------- setup tags ----------
+document.querySelectorAll('.setupBtn').forEach(b=>{
+  b.onclick=()=>{
+    curSetup = curSetup===b.dataset.setup ? null : b.dataset.setup;
+    document.querySelectorAll('.setupBtn').forEach(x=>x.classList.remove('active'));
+    if(curSetup) b.classList.add('active');
+    calc();
+  };
+});
+
+// ---------- broker search ----------
+const brokerInput=document.getElementById('brokerSearch'), brokerList=document.getElementById('brokerList'), mtServer=document.getElementById('mtServer');
+function renderBrokers(f=""){
+  const fl=f.toLowerCase();
+  const list=BROKERS.filter(b=>!f||b.name.toLowerCase().includes(fl)||b.servers.some(s=>s.toLowerCase().includes(fl))).slice(0,30);
+  brokerList.innerHTML=list.map(b=>{
+    const t=brokerType(b.name);
+    return `<div class="p-3 hover:bg-white/5 cursor-pointer flex justify-between items-center" data-name="${b.name}" data-server="${b.servers[0]}">
+      <div class="flex items-center gap-2">
+        <span class="w-6 h-6 rounded-full bg-violet-600/30 text-violet-300 flex items-center justify-center text-[11px] font-bold">${b.name.charAt(0)}</span>
+        <div><div class="font-bold text-[13px]">${b.name}</div><div class="text-[11px] text-zinc-500">${b.servers[0]}</div></div>
+      </div>
+      <div class="flex flex-col items-end gap-1">
+        <span class="text-[9px] px-1.5 py-0.5 rounded-full ${brokerBadgeClass(t)}">${t}</span>
+        <span class="text-[9px] text-zinc-600">${b.servers.length} srv</span>
+      </div>
+    </div>`;
+  }).join('');
+  brokerList.querySelectorAll('div[data-name]').forEach(el=>{
+    el.onclick=()=>{
+      brokerInput.value=el.dataset.name; mtServer.value=el.dataset.server;
+      document.getElementById('sheetBrokerName').textContent=el.dataset.name;
+      brokerList.classList.add('hidden');
+      if(el.dataset.name==='Custom'){ mtServer.value=''; mtServer.focus(); mtServer.placeholder='Type your server exactly'; }
+      else addRecent(el.dataset.name, el.dataset.server);
+    };
+  });
+}
+brokerInput.onfocus=()=>{ renderBrokers(brokerInput.value); brokerList.classList.remove('hidden'); };
+brokerInput.oninput=()=>{ renderBrokers(brokerInput.value); brokerList.classList.remove('hidden'); };
+document.addEventListener('click', e=>{ if(!e.target.closest('#brokerSearch')&&!e.target.closest('#brokerList')) brokerList.classList.add('hidden'); });
+
+function addRecent(n,s){ let r=JSON.parse(localStorage.getItem('rd_recent')||'[]'); r=r.filter(x=>x.name!==n); r.unshift({name:n,srv:s}); r=r.slice(0,4); localStorage.setItem('rd_recent',JSON.stringify(r)); renderRecent(); }
+function renderRecent(){ let r=JSON.parse(localStorage.getItem('rd_recent')||'[]'); document.getElementById('recentBrokers').innerHTML=r.map(x=>`<button class="recent text-[11px] px-2.5 py-1 rounded-full bg-white/10 border border-white/10" data-srv="${x.srv}" data-name="${x.name}">${x.name}</button>`).join(''); document.querySelectorAll('.recent').forEach(b=>b.onclick=()=>{ brokerInput.value=b.dataset.name; mtServer.value=b.dataset.srv; document.getElementById('sheetBrokerName').textContent=b.dataset.name; }); }
 renderRecent();
-document.querySelectorAll('.platBtn').forEach(b=>b.onclick=()=>{document.querySelectorAll('.platBtn').forEach(x=>x.className='platBtn flex-1 py-3 rounded-xl bg-white/10 text-zinc-400 font-bold text-[12px]');b.className='platBtn flex-1 py-3 rounded-xl bg-white text-black font-bold text-[12px]';curPlat=b.dataset.plat;});
-document.getElementById('tabLive').onclick=()=>{curMode='live';document.getElementById('livePanel').classList.remove('hidden');document.getElementById('demoPanel').classList.add('hidden');document.getElementById('tabLive').className='flex-1 py-2.5 rounded-full bg-white text-black';document.getElementById('tabDemo').className='flex-1 py-2.5 rounded-full text-zinc-400';calc();};
-document.getElementById('tabDemo').onclick=()=>{curMode='demo';document.getElementById('demoPanel').classList.remove('hidden');document.getElementById('livePanel').classList.add('hidden');document.getElementById('tabDemo').className='flex-1 py-2.5 rounded-full bg-white text-black';document.getElementById('tabLive').className='flex-1 py-2.5 rounded-full text-zinc-400';calc();};
-document.getElementById('openSheetBtn').onclick=()=>document.getElementById('sheet').classList.remove('hidden');document.getElementById('closeSheet').onclick=()=>document.getElementById('sheet').classList.add('hidden');
-async function connectMT(){const server=mtServer.value.trim();const login=document.getElementById('mtLogin').value.trim();const pass=document.getElementById('mtPass').value.trim();const line=document.getElementById('sheetStatus');const btn=document.getElementById('btnConnect');if(!server||!login||!pass){line.textContent='Fill server, login, password';return;}btn.textContent='⏳ Provisioning 15-30s...';btn.disabled=true;try{const r=await fetch(`${SUPA_URL}/functions/v1/provision-account`,{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${ANON}`,"apikey":ANON},body:JSON.stringify({login,password:pass,server,platform:curPlat})});const t=await r.text();if(!r.ok)throw new Error(t.slice(0,500));const d=JSON.parse(t);localStorage.setItem('rd_user_account',d.accountId);localStorage.setItem('rd_user_login',login);localStorage.setItem('rd_user_server',server);state={...state,balance:d.balance,equity:d.equity,freeMargin:d.freeMargin||d.balance,marginLevel:d.marginLevel||0};isLive=true;curMode='live';document.getElementById('liveDisconnected').classList.add('hidden');document.getElementById('liveConnected').classList.remove('hidden');document.getElementById('connLabel').textContent=`Connected ${login} @ ${server}`;document.getElementById('liveNums').textContent=`Bal ${money(d.balance)} • Eq ${money(d.equity)} • Free ${money(d.freeMargin||0)}`;document.getElementById('lastUpd').textContent=new Date().toLocaleTimeString();document.getElementById('sheet').classList.add('hidden');btn.textContent='Connect & Pull Equity';btn.disabled=false;calc();refreshMy();}catch(e){line.textContent='Failed: '+e.message.slice(0,300);btn.textContent='Retry';btn.disabled=false;}}
+
+document.querySelectorAll('.platBtn').forEach(b=>b.onclick=()=>{ document.querySelectorAll('.platBtn').forEach(x=>x.className='platBtn flex-1 py-3 rounded-xl bg-white/10 text-zinc-400 font-bold text-[12px]'); b.className='platBtn flex-1 py-3 rounded-xl bg-white text-black font-bold text-[12px]'; curPlat=b.dataset.plat; });
+
+document.getElementById('tabLive').onclick=()=>{ curMode='live'; document.getElementById('livePanel').classList.remove('hidden'); document.getElementById('demoPanel').classList.add('hidden'); document.getElementById('tabLive').className='flex-1 py-2.5 rounded-full bg-white text-black'; document.getElementById('tabDemo').className='flex-1 py-2.5 rounded-full text-zinc-400'; calc(); };
+document.getElementById('tabDemo').onclick=()=>{ curMode='demo'; document.getElementById('demoPanel').classList.remove('hidden'); document.getElementById('livePanel').classList.add('hidden'); document.getElementById('tabDemo').className='flex-1 py-2.5 rounded-full bg-white text-black'; document.getElementById('tabLive').className='flex-1 py-2.5 rounded-full text-zinc-400'; calc(); };
+document.getElementById('openSheetBtn').onclick=()=>document.getElementById('sheet').classList.remove('hidden');
+document.getElementById('closeSheet').onclick=()=>document.getElementById('sheet').classList.add('hidden');
+
+async function connectMT(){
+  const server=mtServer.value.trim(), login=document.getElementById('mtLogin').value.trim(), pass=document.getElementById('mtPass').value.trim();
+  const line=document.getElementById('sheetStatus'), btn=document.getElementById('btnConnect');
+  if(!server||!login||!pass){ line.textContent='Fill server, login, password'; return; }
+  btn.textContent='⏳ Provisioning 15-30s...'; btn.disabled=true;
+  try{
+    const r=await fetch(`${SUPA_URL}/functions/v1/provision-account`,{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${ANON}`,"apikey":ANON},body:JSON.stringify({login,password:pass,server,platform:curPlat})});
+    const t=await r.text(); if(!r.ok) throw new Error(t.slice(0,500));
+    const d=JSON.parse(t);
+    localStorage.setItem('rd_user_account', d.accountId);
+    localStorage.setItem('rd_user_login', login);
+    localStorage.setItem('rd_user_server', server);
+    state={...state, balance:d.balance, equity:d.equity, freeMargin:d.freeMargin||d.balance, marginLevel:d.marginLevel||0};
+    isLive=true; curMode='live';
+    document.getElementById('liveDisconnected').classList.add('hidden');
+    document.getElementById('liveConnected').classList.remove('hidden');
+    document.getElementById('connLabel').textContent=`Connected ${login} @ ${server}`;
+    document.getElementById('liveNums').textContent=`Bal ${money(d.balance)} • Eq ${money(d.equity)} • Free ${money(d.freeMargin||0)}`;
+    document.getElementById('lastUpd').textContent=new Date().toLocaleTimeString();
+    document.getElementById('sheet').classList.add('hidden');
+    btn.textContent='Connect & pull equity'; btn.disabled=false;
+    calc(); refreshMy();
+  }catch(e){
+    line.textContent='Failed: '+e.message.slice(0,300);
+    btn.textContent='Retry'; btn.disabled=false;
+  }
+}
 document.getElementById('btnConnect').onclick=connectMT;
-async function refreshMy(){const aid=localStorage.getItem('rd_user_account');if(!aid)return;try{const r=await fetch(`${SUPA_URL}/functions/v1/get-account-state`,{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${ANON}`,"apikey":ANON},body:JSON.stringify({accountId:aid})});const t=await r.text();if(!r.ok)throw new Error(t.slice(0,300));const d=JSON.parse(t);state={...state,...d};document.getElementById('liveNums').textContent=`Bal ${money(d.balance)} • Eq ${money(d.equity)} • Free ${money(d.freeMargin||0)} • ML ${(d.marginLevel||0).toFixed(1)}%`;document.getElementById('lastUpd').textContent=new Date().toLocaleTimeString();document.getElementById('dailyPnL').textContent=`${d.dailyPnL>=0?'+':''}$${(d.dailyPnL||0).toFixed(2)}`;document.getElementById('dailyPnL').className=(d.dailyPnL||0)>=0?"font-bold text-[14px] text-emerald-400":"font-bold text-[14px] text-red-400";document.getElementById('dailyLossPct').textContent=`${(d.dailyLossPct||0).toFixed(2)}%`;const pct=Math.min(Math.abs(d.dailyLossPct||0)/5*100,100);document.getElementById('dailyBar').style.width=pct+'%';document.getElementById('dailyBar').className=d.isDailyLossBreached?"h-2 bg-red-500 rounded-full":"h-2 bg-emerald-500 rounded-full";document.getElementById('propStatus').textContent=d.isDailyLossBreached?"BREACH WARNING - STOP":"SAFE - Keep trading";document.getElementById('propStatus').className=d.isDailyLossBreached?"mt-2 text-[11px] font-bold px-2 py-1 rounded-full bg-red-500/20 text-red-300 inline-block":"mt-2 text-[11px] font-bold px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-300 inline-block";if(d.historyWarning){document.getElementById('historyWarn').textContent=d.historyWarning;document.getElementById('historyWarn').classList.remove('hidden');}calc();}catch(e){document.getElementById('liveNums').textContent='Refresh failed: '+e.message.slice(0,200);}}
+
+async function refreshMy(){
+  const aid=localStorage.getItem('rd_user_account'); if(!aid) return;
+  try{
+    const r=await fetch(`${SUPA_URL}/functions/v1/get-account-state`,{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${ANON}`,"apikey":ANON},body:JSON.stringify({accountId:aid})});
+    const t=await r.text(); if(!r.ok) throw new Error(t.slice(0,300));
+    const d=JSON.parse(t);
+    state={...state, ...d};
+    document.getElementById('liveNums').textContent=`Bal ${money(d.balance)} • Eq ${money(d.equity)} • Free ${money(d.freeMargin||0)} • ML ${(d.marginLevel||0).toFixed(1)}%`;
+    document.getElementById('lastUpd').textContent=new Date().toLocaleTimeString();
+    document.getElementById('dailyPnL').textContent=money(d.dailyPnL||0);
+    document.getElementById('dailyPnL').className=(d.dailyPnL||0)>=0?"font-bold text-[14px] text-emerald-400":"font-bold text-[14px] text-red-400";
+    document.getElementById('dailyLossPct').textContent=`${(d.dailyLossPct||0).toFixed(2)}%`;
+    const pct=Math.min(Math.abs(d.dailyLossPct||0)/5*100,100);
+    document.getElementById('dailyBar').style.width=pct+'%';
+    document.getElementById('dailyBar').className=d.isDailyLossBreached?"h-2 bg-red-500 rounded-full":pct>70?"h-2 bg-amber-500 rounded-full":"h-2 bg-emerald-500 rounded-full";
+    document.getElementById('propStatus').textContent=d.isDailyLossBreached?"BREACH WARNING — STOP":pct>70?"CLOSE TO LIMIT":"SAFE — keep trading";
+    document.getElementById('propStatus').className=d.isDailyLossBreached?"mt-2 text-[11px] font-bold px-2 py-1 rounded-full bg-red-500/20 text-red-300 inline-block":pct>70?"mt-2 text-[11px] font-bold px-2 py-1 rounded-full bg-amber-500/20 text-amber-300 inline-block":"mt-2 text-[11px] font-bold px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-300 inline-block";
+    if(d.historyWarning){ document.getElementById('historyWarn').textContent=d.historyWarning; document.getElementById('historyWarn').classList.remove('hidden'); } else { document.getElementById('historyWarn').classList.add('hidden'); }
+    calc();
+  }catch(e){ document.getElementById('liveNums').textContent='Refresh failed: '+e.message.slice(0,200); }
+}
 document.getElementById('refreshBtn').onclick=refreshMy;
-document.getElementById('changeBtn').onclick=()=>{document.getElementById('liveDisconnected').classList.remove('hidden');document.getElementById('liveConnected').classList.add('hidden');};
-document.getElementById('riskPct').oninput=e=>{document.getElementById('riskVal').textContent=parseFloat(e.target.value).toFixed(1)+'%';calc();};document.getElementById('sl').oninput=calc;document.getElementById('pipRate').oninput=calc;document.getElementById('mode').onchange=calc;document.getElementById('symbol').oninput=calc;document.getElementById('demoBal').oninput=calc;document.getElementById('demoEq').oninput=()=>{document.getElementById('demoSlider').value=document.getElementById('demoEq').value;calc();};document.getElementById('demoSlider').oninput=e=>{document.getElementById('demoEq').value=e.target.value;document.getElementById('demoBal').value=e.target.value;calc();};
-document.querySelectorAll('.preS').forEach(b=>b.onclick=()=>{const[sym,sl]=b.dataset.pre.split(',');document.getElementById('symbol').value=sym;document.getElementById('sl').value=sl;calc();});
-document.getElementById('planFree').onclick=()=>{document.getElementById('planFree').className='px-2.5 py-1.5 rounded-full bg-white text-black';document.getElementById('planPro').className='px-2.5 py-1.5 rounded-full text-zinc-400';document.getElementById('planElite').className='px-2.5 py-1.5 rounded-full text-zinc-400';};
-document.getElementById('planPro').onclick=()=>{document.getElementById('planFree').className='px-2.5 py-1.5 rounded-full text-zinc-400';document.getElementById('planPro').className='px-2.5 py-1.5 rounded-full bg-violet-600 text-white';document.getElementById('planElite').className='px-2.5 py-1.5 rounded-full text-zinc-400';};
-document.getElementById('planElite').onclick=()=>{document.getElementById('planFree').className='px-2.5 py-1.5 rounded-full text-zinc-400';document.getElementById('planPro').className='px-2.5 py-1.5 rounded-full text-zinc-400';document.getElementById('planElite').className='px-2.5 py-1.5 rounded-full bg-amber-500 text-black';};
-// JOURNAL
-function getJ(){try{return JSON.parse(localStorage.getItem('rd_journal_v10')||'[]');}catch{return[];}}function setJ(a){localStorage.setItem('rd_journal_v10',JSON.stringify(a));renderJ();}
-function renderJ(){const j=getJ();document.getElementById('jCount').textContent=j.length;document.getElementById('jEmpty').classList.toggle('hidden',j.length>0);document.getElementById('jList').innerHTML=j.slice().reverse().map((r,i)=>{const idx=j.length-1-i;return `<div class="flex justify-between bg-black/40 rounded-xl px-3 py-2.5"><div class="text-[12px]"><span class="font-bold">${r.symbol}</span> <span class="text-zinc-500">• ${r.lot} • ${r.riskPct}% • ${r.sl}p</span><div class="text-[10px] text-zinc-600">${r.date} ${r.broker||''}</div></div><button data-i="${idx}" class="del text-zinc-500">×</button></div>`;}).join('');document.querySelectorAll('.del').forEach(b=>b.onclick=()=>{let a=getJ();a.splice(parseInt(b.dataset.i),1);setJ(a);});}
-document.getElementById('saveTrade').onclick=()=>{const c=window._lastCalc;if(!c)return;let a=getJ();if(a.length>=5&&document.getElementById('planFree').classList.contains('bg-white')){alert('Free limit 5 - upgrade Pro $19');return;}a.push({date:new Date().toLocaleString(),symbol:c.symbol,lot:c.lot,riskPct:c.riskPct,sl:c.sl,base:c.base,broker:document.getElementById('brokerSearch').value||document.getElementById('mtServer').value});setJ(a);};document.getElementById('exportCsv').onclick=()=>{const j=getJ();if(!j.length)return;const h='date,symbol,lot,risk_pct,sl,base,broker\n';const rows=j.map(r=>[r.date,r.symbol,r.lot,r.riskPct,r.sl,r.base,r.broker].join(',')).join('\n');const blob=new Blob([h+rows],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='riskdesk-v10.csv';a.click();};document.getElementById('clearJ').onclick=()=>{if(confirm('Clear journal?')){localStorage.removeItem('rd_journal_v10');renderJ();}};
-// STRIPE SUCCESS HANDLING
-(function(){const params=new URLSearchParams(window.location.search);if(params.get('success')==='true'||params.get('stripe_status')==='success'){const sess=params.get('session_id')||'test';localStorage.setItem('rd_plan','pro');localStorage.setItem('rd_license',sess);alert('Payment success! Pro unlocked. Replace test links with real Stripe links later.');history.replaceState({},'',window.location.pathname);}if(localStorage.getItem('rd_plan')==='pro'){document.getElementById('planPro').click();}})();
-(function(){renderJ();calc();const acc=localStorage.getItem('rd_user_account');if(acc){document.getElementById('tabLive').click();document.getElementById('liveDisconnected').classList.add('hidden');document.getElementById('liveConnected').classList.remove('hidden');document.getElementById('connLabel').textContent='Connected '+(localStorage.getItem('rd_user_login')||acc);refreshMy();}else{document.getElementById('tabDemo').click();}renderRecent();})();
+setInterval(()=>{ if(curMode==='live' && !document.hidden && localStorage.getItem('rd_user_account')) refreshMy(); }, 20000);
+document.getElementById('changeBtn').onclick=()=>{ document.getElementById('liveDisconnected').classList.remove('hidden'); document.getElementById('liveConnected').classList.add('hidden'); };
+
+document.getElementById('riskPct').oninput=e=>{ document.getElementById('riskVal').textContent=parseFloat(e.target.value).toFixed(1)+'%'; calc(); };
+document.getElementById('sl').oninput=calc; document.getElementById('tp').oninput=calc; document.getElementById('pipRate').oninput=calc;
+document.getElementById('mode').onchange=calc; document.getElementById('symbol').oninput=calc;
+document.getElementById('demoBal').oninput=calc;
+document.getElementById('demoEq').oninput=()=>{ document.getElementById('demoSlider').value=document.getElementById('demoEq').value; calc(); };
+document.getElementById('demoSlider').oninput=e=>{ document.getElementById('demoEq').value=e.target.value; document.getElementById('demoBal').value=e.target.value; calc(); };
+document.querySelectorAll('.preS').forEach(b=>b.onclick=()=>{ const [sym,sl]=b.dataset.pre.split(','); document.getElementById('symbol').value=sym; document.getElementById('sl').value=sl; calc(); });
+
+// ---------- plan (Free / Pro / Elite) — now actually toggles veils ----------
+function applyPlan(){
+  const isPro = plan==='pro'||plan==='elite', isElite = plan==='elite';
+  document.getElementById('planFree').className='px-2.5 py-1.5 rounded-full '+(plan==='free'?'bg-white text-black':'text-zinc-400');
+  document.getElementById('planPro').className='px-2.5 py-1.5 rounded-full '+(plan==='pro'?'bg-violet-600 text-white':'text-zinc-400');
+  document.getElementById('planElite').className='px-2.5 py-1.5 rounded-full '+(plan==='elite'?'bg-amber-500 text-black':'text-zinc-400');
+  document.getElementById('analyticsVeil').classList.toggle('hidden', isPro);
+  document.getElementById('playbookVeil').classList.toggle('hidden', isPro);
+  document.getElementById('propVeil').classList.toggle('hidden', isElite);
+  document.getElementById('aiVeil').classList.toggle('hidden', isElite);
+  document.getElementById('screenshotBtn').disabled = !isElite;
+  document.getElementById('screenshotBtn').classList.toggle('opacity-40', !isElite);
+  renderJ(); renderAnalytics(); renderAI();
+}
+document.getElementById('planFree').onclick=()=>{ plan='free'; localStorage.setItem('rd_plan','free'); applyPlan(); };
+document.getElementById('planPro').onclick=()=>{ plan='pro'; localStorage.setItem('rd_plan','pro'); applyPlan(); };
+document.getElementById('planElite').onclick=()=>{ plan='elite'; localStorage.setItem('rd_plan','elite'); applyPlan(); };
+document.querySelectorAll('.upgradeBtn').forEach(b=> b.onclick=()=> window.open('#','_blank'));
+document.getElementById('screenshotBtn').onclick=()=>{ if(plan!=='elite') return; alert('Screenshot upload is a placeholder in this build — wire up storage before shipping.'); };
+
+// ---------- journal ----------
+const FREE_CAP=5;
+function getJ(){ try{ return JSON.parse(localStorage.getItem('rd_journal_v10')||'[]'); }catch{ return []; } }
+function setJ(a){ localStorage.setItem('rd_journal_v10', JSON.stringify(a)); renderJ(); renderAnalytics(); renderAI(); checkTilt(); }
+
+function renderJ(){
+  const j=getJ(); const isPro = plan==='pro'||plan==='elite';
+  document.getElementById('jCount').textContent=`${j.length}${isPro?'':'/'+FREE_CAP}`;
+  document.getElementById('freeCapNote').classList.toggle('hidden', isPro || j.length<FREE_CAP);
+  document.getElementById('jEmpty').classList.toggle('hidden', j.length>0);
+  document.getElementById('jList').innerHTML = j.slice().reverse().map((r,i)=>{
+    const idx=j.length-1-i;
+    const outcomeColor = r.outcome==='win'?'text-emerald-400':r.outcome==='loss'?'text-red-400':'text-zinc-500';
+    return `<div class="bg-black/40 rounded-xl px-3 py-2.5">
+      <div class="flex justify-between items-center cursor-pointer rowHead" data-idx="${idx}">
+        <div class="text-[12px]">
+          <span class="font-bold">${r.symbol}</span>
+          <span class="text-zinc-500"> • ${r.lot} • ${r.riskPct}% • ${r.sl}p${r.setup?' • '+r.setup:''}</span>
+          ${r.outcome?`<span class="${outcomeColor} font-semibold"> • ${r.outcome.toUpperCase()}${r.resultUsd!=null?' '+money(r.resultUsd):''}</span>`:''}
+          <div class="text-[10px] text-zinc-600">${r.date}</div>
+        </div>
+        <button data-i="${idx}" class="del text-zinc-500 text-[16px] leading-none px-1">×</button>
+      </div>
+      <div class="rowDetail hidden mt-2 pt-2 border-t border-white/5" data-idx="${idx}">
+        <div class="flex gap-1.5 mb-2">
+          ${['win','loss','be'].map(o=>`<button data-idx="${idx}" data-field="outcome" data-val="${o}" class="outBtn chip text-[11px] px-2.5 py-1 rounded-full ${r.outcome===o?'active':''}">${o.toUpperCase()}</button>`).join('')}
+        </div>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-[11px] text-zinc-500">Result $</span>
+          <input type="number" data-idx="${idx}" class="resultInput flex-1 bg-black/50 border border-white/10 rounded-lg px-2 py-1.5 text-[12px]" value="${r.resultUsd??''}" placeholder="e.g. -120">
+        </div>
+        <label class="flex items-center gap-2 text-[11px] text-zinc-400">
+          <input type="checkbox" data-idx="${idx}" class="slCheck" ${r.respectedSL?'checked':''}> Respected stop loss
+        </label>
+      </div>
+    </div>`;
+  }).join('');
+  document.querySelectorAll('.rowHead').forEach(h=> h.onclick=(e)=>{ if(e.target.classList.contains('del')) return; document.querySelector(`.rowDetail[data-idx="${h.dataset.idx}"]`).classList.toggle('hidden'); });
+  document.querySelectorAll('.del').forEach(b=> b.onclick=(e)=>{ e.stopPropagation(); let a=getJ(); a.splice(parseInt(b.dataset.i),1); setJ(a); });
+  document.querySelectorAll('.outBtn').forEach(b=> b.onclick=()=>{ let a=getJ(); a[parseInt(b.dataset.idx)].outcome=b.dataset.val; setJ(a); });
+  document.querySelectorAll('.resultInput').forEach(inp=> inp.onchange=()=>{ let a=getJ(); a[parseInt(inp.dataset.idx)].resultUsd = inp.value===''?null:parseFloat(inp.value); setJ(a); });
+  document.querySelectorAll('.slCheck').forEach(cb=> cb.onchange=()=>{ let a=getJ(); a[parseInt(cb.dataset.idx)].respectedSL = cb.checked; setJ(a); });
+}
+
+document.getElementById('saveTrade').onclick=()=>{
+  const c=window._lastCalc; if(!c) return;
+  const isPro = plan==='pro'||plan==='elite';
+  let a=getJ();
+  if(!isPro && a.length>=FREE_CAP){ document.getElementById('freeCapNote').classList.remove('hidden'); return; }
+  a.push({date:new Date().toLocaleString(), ts:Date.now(), symbol:c.symbol, lot:c.lot, riskPct:c.riskPct, sl:c.sl, tp:c.tp, base:c.base, setup:c.setup, outcome:null, resultUsd:null, respectedSL:null});
+  setJ(a);
+};
+document.getElementById('exportCsv').onclick=()=>{
+  if(plan==='free'){ window.open('#','_blank'); return; }
+  const j=getJ(); if(!j.length) return;
+  const h='date,symbol,lot,risk_pct,sl,tp,base,setup,outcome,result_usd,respected_sl\n';
+  const rows=j.map(r=>[r.date,r.symbol,r.lot,r.riskPct,r.sl,r.tp||'',r.base,r.setup||'',r.outcome||'',r.resultUsd??'',r.respectedSL??''].join(',')).join('\n');
+  const blob=new Blob([h+rows],{type:'text/csv'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='riskdesk-v11.csv'; a.click();
+};
+document.getElementById('clearJ').onclick=()=>{ if(confirm('Clear journal?')){ localStorage.removeItem('rd_journal_v10'); renderJ(); renderAnalytics(); renderAI(); } };
+
+// ---------- tilt detection ----------
+function checkTilt(){
+  const j=getJ().filter(r=>r.outcome).slice(-3);
+  document.getElementById('tiltBanner').classList.toggle('hidden', !(j.length===3 && j.every(r=>r.outcome==='loss')));
+}
+document.getElementById('tiltDismiss').onclick=()=> document.getElementById('tiltBanner').classList.add('hidden');
+
+// ---------- analytics ----------
+function renderAnalytics(){
+  const j=getJ();
+  const withOutcome=j.filter(r=>r.outcome==='win'||r.outcome==='loss');
+  const wins=withOutcome.filter(r=>r.outcome==='win');
+  document.getElementById('winRateVal').textContent = withOutcome.length ? `${Math.round(wins.length/withOutcome.length*100)}%` : '—';
+
+  const withResult=withOutcome.filter(r=>r.resultUsd!=null);
+  if(withResult.length){
+    const winR=withResult.filter(r=>r.outcome==='win'), lossR=withResult.filter(r=>r.outcome==='loss');
+    const avgWin = winR.length ? winR.reduce((s,r)=>s+r.resultUsd,0)/winR.length : 0;
+    const avgLoss = lossR.length ? Math.abs(lossR.reduce((s,r)=>s+r.resultUsd,0)/lossR.length) : 0;
+    const wr = withOutcome.length ? wins.length/withOutcome.length : 0;
+    const expectancy = (wr*avgWin) - ((1-wr)*avgLoss);
+    document.getElementById('expectancyVal').textContent = money(expectancy);
+  } else { document.getElementById('expectancyVal').textContent='—'; }
+
+  const withSL=j.filter(r=>r.respectedSL!==null && r.respectedSL!==undefined);
+  document.getElementById('disciplineVal').textContent = withSL.length ? `${Math.round(withSL.filter(r=>r.respectedSL).length/withSL.length*100)}%` : '—';
+
+  const bySetup={};
+  withOutcome.forEach(r=>{ const s=r.setup||'Untagged'; bySetup[s]=bySetup[s]||{w:0,t:0}; bySetup[s].t++; if(r.outcome==='win') bySetup[s].w++; });
+  document.getElementById('setupWinRates').textContent = Object.keys(bySetup).length ? Object.entries(bySetup).map(([s,v])=>`${s}: ${Math.round(v.w/v.t*100)}%`).join(' · ') : 'Tag setups on saved trades to see win rate by setup.';
+}
+
+// ---------- playbook ----------
+function getPB(){ try{ return JSON.parse(localStorage.getItem('rd_playbook')||'[]'); }catch{ return []; } }
+function renderPB(){
+  const items=getPB();
+  document.getElementById('playbookList').innerHTML = items.map((t,i)=>`<div class="flex justify-between items-center bg-black/40 rounded-lg px-3 py-2 text-[12px]"><span>${t}</span><button data-i="${i}" class="pbDel text-zinc-500 text-[15px] leading-none">×</button></div>`).join('');
+  document.querySelectorAll('.pbDel').forEach(b=> b.onclick=()=>{ let a=getPB(); a.splice(parseInt(b.dataset.i),1); localStorage.setItem('rd_playbook',JSON.stringify(a)); renderPB(); });
+}
+document.getElementById('playbookAdd').onclick=()=>{
+  if(plan==='free') return;
+  const inp=document.getElementById('playbookInput'); if(!inp.value.trim()) return;
+  let a=getPB(); a.push(inp.value.trim()); localStorage.setItem('rd_playbook',JSON.stringify(a)); inp.value=''; renderPB();
+};
+
+// ---------- AI risk analysis (heuristic, computed locally — not a live model call) ----------
+function renderAI(){
+  const j=getJ().filter(r=>r.outcome);
+  const el=document.getElementById('aiInsights');
+  if(j.length<4){ el.innerHTML='<div class="text-zinc-500">Log at least 4 trade outcomes to unlock pattern analysis.</div>'; return; }
+  const insights=[];
+  let afterTwoLossTotal=0, afterTwoLossLoss=0;
+  for(let i=2;i<j.length;i++){
+    if(j[i-1].outcome==='loss' && j[i-2].outcome==='loss'){
+      afterTwoLossTotal++; if(j[i].outcome==='loss') afterTwoLossLoss++;
+    }
+  }
+  if(afterTwoLossTotal>=2) insights.push(`After 2 losses in a row, your next trade is also a loss ${Math.round(afterTwoLossLoss/afterTwoLossTotal*100)}% of the time.`);
+  const withSL=j.filter(r=>r.respectedSL!==null && r.respectedSL!==undefined);
+  if(withSL.length) insights.push(`Discipline: ${Math.round(withSL.filter(r=>r.respectedSL).length/withSL.length*100)}% of trades respected your stop loss.`);
+  if(!insights.length) insights.push('No strong patterns yet — keep logging outcomes.');
+  el.innerHTML = insights.map(t=>`<div>• ${t}</div>`).join('');
+}
+
+// ---------- toast ----------
+function showToast(msg){
+  const wrap=document.getElementById('toastWrap');
+  const t=document.createElement('div');
+  t.className='toast-enter glass rounded-full px-4 py-2.5 text-[13px] font-semibold pointer-events-auto';
+  t.textContent=msg;
+  wrap.appendChild(t);
+  setTimeout(()=>t.remove(), 3500);
+}
+
+// ---------- Stripe success handling ----------
+// NOTE: this unlock is client-side only (localStorage), same as flagged in your own research doc —
+// it is spoofable via URL params and should be replaced with a server-verified session before real launch.
+(function(){
+  const params=new URLSearchParams(window.location.search);
+  if(params.get('success')==='true' || params.get('stripe_status')==='success'){
+    const tier = params.get('tier')==='elite' ? 'elite' : 'pro';
+    const sess = params.get('session_id') || 'test';
+    localStorage.setItem('rd_plan', tier);
+    localStorage.setItem('rd_license', sess);
+    showToast(`✅ ${tier==='elite'?'Elite':'Pro'} unlocked`);
+    history.replaceState({}, '', window.location.pathname);
+  }
+})();
+
+// ---------- init ----------
+(function init(){
+  plan = localStorage.getItem('rd_plan') || 'free';
+  applyPlan();
+  renderPB();
+  renderJ(); renderAnalytics(); renderAI(); checkTilt();
+  const acc=localStorage.getItem('rd_user_account');
+  if(acc){
+    document.getElementById('tabLive').click();
+    document.getElementById('liveDisconnected').classList.add('hidden');
+    document.getElementById('liveConnected').classList.remove('hidden');
+    document.getElementById('connLabel').textContent='Connected '+(localStorage.getItem('rd_user_login')||acc);
+    isLive=true;
+    refreshMy();
+  } else {
+    document.getElementById('tabDemo').click();
+  }
+  calc();
+})();
 </script>
 </body>
 </html>
