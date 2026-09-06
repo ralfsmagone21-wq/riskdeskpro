@@ -2,266 +2,72 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#07070a">
-<title>RiskDesk Pro - LIVE</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RiskDesk Pro - BYO Live</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;650;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#07070a;
-    --bg-wash: radial-gradient(1200px 500px at 50% -10%, rgba(124,92,255,0.10), transparent 60%);
-    --surface:#101018;
-    --surface-2:#15151f;
-    --line: rgba(255,255,255,0.07);
-    --line-soft: rgba(255,255,255,0.045);
-    --violet:#8a6bff;
-    --violet-dim: rgba(138,107,255,0.35);
-    --amber:#f0a63a;
-    --emerald:#3ddc97;
-    --text:#eceef2;
-    --text-dim:#8b8b99;
-    --text-faint:#5b5b68;
-  }
-  *{-webkit-tap-highlight-color:transparent}
-  html{ overscroll-behavior-y:none; }
-  body{
-    font-family:'Inter',system-ui,sans-serif;
-    background:var(--bg);
-    background-image:var(--bg-wash);
-    color:var(--text);
-    letter-spacing:-0.01em;
-    overscroll-behavior-y:none;
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: calc(7rem + env(safe-area-inset-bottom));
-    min-height:100dvh;
-  }
-  /* iOS: any input under 16px triggers an auto-zoom on focus - never go below it */
-  input, select, textarea, button{ font-size:16px; }
-  input[type=range]{ font-size:inherit; }
-
-  /* Tactile / haptic-style press feedback on every interactive control */
-  button, .tap{
-    touch-action: manipulation;
-    user-select:none;
-    -webkit-user-select:none;
-    transition: transform .08s cubic-bezier(.2,.8,.3,1), filter .08s ease, opacity .08s ease;
-  }
-  button:active, .tap:active{
-    transform: scale(0.95);
-    filter: brightness(0.9);
-  }
-  .mono{ font-family:'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; letter-spacing:-0.01em; }
-  .label{ font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-faint); font-weight:600; }
-  .glass{
-    background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0) 40%), var(--surface);
-    border:1px solid var(--line);
-    box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 20px 40px -24px rgba(0,0,0,0.6);
-  }
-  .field{
-    background: rgba(0,0,0,0.35);
-    border:1px solid var(--line);
-    transition: border-color .15s ease, background .15s ease;
-  }
-  .field:focus{ outline:none; border-color: var(--violet-dim); background: rgba(0,0,0,0.5); }
-
-  .hero-card{
-    position:relative;
-    background: linear-gradient(180deg, rgba(138,107,255,0.09), rgba(138,107,255,0.02) 45%, var(--surface) 100%);
-    border:1px solid rgba(138,107,255,0.22);
-  }
-  .hero-glow{
-    position:absolute; inset:-1px; border-radius:inherit; pointer-events:none;
-    box-shadow: 0 0 0 1px rgba(138,107,255,0.10), 0 0 60px 6px rgba(138,107,255,0.10);
-    animation: breathe 4.5s ease-in-out infinite;
-  }
-  @keyframes breathe{
-    0%,100%{ box-shadow: 0 0 0 1px rgba(138,107,255,0.10), 0 0 50px 4px rgba(138,107,255,0.08); }
-    50%{ box-shadow: 0 0 0 1px rgba(138,107,255,0.18), 0 0 70px 10px rgba(138,107,255,0.16); }
-  }
-
-  input[type=range]{ -webkit-appearance:none; appearance:none; height:3px; background:var(--line); border-radius:99px; }
-  input[type=range]::-webkit-slider-thumb{
-    -webkit-appearance:none; appearance:none; width:15px; height:15px; border-radius:50%;
-    background:var(--violet); box-shadow: 0 0 0 4px rgba(138,107,255,0.18), 0 2px 6px rgba(0,0,0,0.5);
-    cursor:pointer; margin-top:-6px;
-  }
-  input[type=range]::-moz-range-thumb{
-    width:15px; height:15px; border-radius:50%; border:none;
-    background:var(--violet); box-shadow: 0 0 0 4px rgba(138,107,255,0.18);
-    cursor:pointer;
-  }
-
-  .seg-btn{ transition: all .15s ease; }
-  .dot{ width:6px; height:6px; border-radius:50%; display:inline-block; }
-
-  #gear{ transition: transform .2s ease, background .15s ease; }
-  #gear:active{ transform: scale(0.92); }
-  #refreshBtn:active{ transform: scale(0.96); }
-  #refreshBtn{ transition: transform .1s ease; }
-
-  ::selection{ background: rgba(138,107,255,0.35); }
-
-  @media (prefers-reduced-motion: reduce){
-    .hero-glow{ animation:none; }
-  }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;900&display=swap" rel="stylesheet">
+<style>body{font-family:Inter,system-ui;background:#07070b;color:#e5e7eb} .glass{background:rgba(18,18,26,0.9);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.07)}</style>
 </head>
-<body class="px-3 pb-28 pt-1">
-<script>
-// === BAKED IN - NO SETUP NEEDED ===
-const SUPA_URL = "https://zvtjrjnadvajmambsgre.supabase.co";
-const BAKED_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp2dGpyam5hZHZham1hbWJzZ3JlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxOTEzMzQsImV4cCI6MjEwMTc2NzMzNH0.LwAghCC_AZjZy9sHb3eBl4WSrn7SViKi6q2KAJep8e8";
-const BAKED_LIVE = "189db161-42f0-4576-8135-1b833024a938";
-const BAKED_DEMO = ""; // add demo UUID later if you want real demo equity
-localStorage.setItem('rd_anon', BAKED_ANON);
-localStorage.setItem('rd_live', BAKED_LIVE);
-if(BAKED_DEMO) localStorage.setItem('rd_demo', BAKED_DEMO);
-</script>
-
+<body class="p-3 pb-28">
 <div class="max-w-[640px] mx-auto">
-
-  <div class="flex justify-between items-center py-5">
-    <div>
-      <h1 class="text-[22px] font-[800] leading-none flex items-baseline gap-2">
-        RiskDesk Pro <span class="mono text-[13px] font-[600] text-[var(--violet)]">LIVE</span>
-      </h1>
-      <div class="mono text-[10px] text-[var(--text-faint)] mt-1.5 tracking-wide">v6.1 · 125904269 · SOLID CORE</div>
-    </div>
-    <button id="gear" class="tap w-12 h-12 rounded-full bg-[var(--surface-2)] border border-[var(--line)] flex items-center justify-center text-[17px]">⚙</button>
+  <div class="flex justify-between items-center py-4">
+    <div><h1 class="text-[24px] font-black">RiskDesk Pro <span class="text-violet-400">BYO</span></h1><div class="text-[11px] text-zinc-500 tracking-widest uppercase">V7.0 • EACH USER'S OWN MT4/MT5 • SELLABLE</div></div>
+    <div class="text-[10px] px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-300">MULTI-TENANT READY</div>
   </div>
 
-  <div id="setupOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 opacity-0 pointer-events-none transition-opacity duration-300"></div>
-  <div id="setup" class="fixed left-0 right-0 bottom-0 z-50 translate-y-full transition-transform duration-300 ease-out"
-       style="padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));">
-    <div class="glass rounded-t-[28px] rounded-b-none p-5 max-w-[640px] mx-auto max-h-[85dvh] overflow-y-auto">
-      <div class="w-9 h-1.5 rounded-full bg-[var(--line)] mx-auto mb-4"></div>
-      <div class="flex items-center justify-between mb-4">
-        <div class="label !text-[12px]">Connection settings</div>
-        <button id="setupClose" class="tap w-9 h-9 rounded-full bg-[var(--surface-2)] border border-[var(--line)] flex items-center justify-center text-[13px] text-[var(--text-dim)]">✕</button>
-      </div>
-      <div class="space-y-3">
-        <div>
-          <div class="flex items-center justify-between mb-1.5"><label class="label">Supabase anon key</label><button data-copy="inpAnon" class="tap copyBtn text-[11px] font-[700] text-[var(--violet)] px-2 py-1">Copy</button></div>
-          <textarea id="inpAnon" onfocus="this.select()" rows="3" class="w-full field rounded-2xl px-3.5 py-3 text-[13px] mono text-[var(--text-dim)] break-all leading-relaxed"></textarea>
-        </div>
-        <div>
-          <div class="flex items-center justify-between mb-1.5"><label class="label">Live account UUID</label><button data-copy="inpLive" class="tap copyBtn text-[11px] font-[700] text-[var(--violet)] px-2 py-1">Copy</button></div>
-          <input id="inpLive" onfocus="this.select()" class="w-full field rounded-2xl px-3.5 py-3.5 text-[15px] mono text-[var(--text-dim)]">
-        </div>
-        <div>
-          <div class="flex items-center justify-between mb-1.5"><label class="label">Demo account UUID (optional)</label><button data-copy="inpDemo" class="tap copyBtn text-[11px] font-[700] text-[var(--violet)] px-2 py-1">Copy</button></div>
-          <input id="inpDemo" onfocus="this.select()" class="w-full field rounded-2xl px-3.5 py-3.5 text-[15px] mono text-[var(--text-dim)]">
-        </div>
-        <button id="saveIds" class="tap w-full bg-[var(--violet)] text-black py-4 rounded-full font-[700] text-[15px] mt-2">Save</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="glass rounded-[18px] p-4 mb-3">
+  <!-- BYO CONNECT CARD - THE MONEY MAKER -->
+  <div class="glass rounded-[20px] p-4 mb-3 border-violet-500/30">
     <div class="flex justify-between items-center mb-3">
-      <span class="label">Live account state</span>
-      <div class="flex gap-1 bg-[var(--surface-2)] p-1 rounded-full border border-[var(--line-soft)]">
-        <button id="btnLive" class="tap seg-btn px-4 py-2.5 rounded-full bg-[var(--violet)] text-black text-[12px] font-[700]">LIVE</button>
-        <button id="btnDemo" class="tap seg-btn px-4 py-2.5 rounded-full text-[12px] text-[var(--text-dim)] font-[600]">DEMO</button>
+      <span class="text-[11px] uppercase tracking-widest text-zinc-400">Connect Your MT Account</span>
+      <span id="connStatus" class="text-[10px] px-2 py-1 rounded-full bg-zinc-800 text-zinc-400">Not connected</span>
+    </div>
+    <div class="grid grid-cols-1 gap-2">
+      <div class="grid grid-cols-2 gap-2">
+        <div><label class="text-[10px] uppercase text-zinc-500">Server</label><input id="mtServer" value="TradeQuo-Server" placeholder="TradeQuo-Server" class="w-full mt-1 bg-black/50 border border-white/10 rounded-xl px-3 py-3 text-[13px] font-bold"></div>
+        <div><label class="text-[10px] uppercase text-zinc-500">Platform</label><select id="mtPlatform" class="w-full mt-1 bg-black/50 border border-white/10 rounded-xl px-3 py-3 text-[13px]"><option value="mt5" selected>MT5</option><option value="mt4">MT4</option></select></div>
       </div>
+      <div class="grid grid-cols-2 gap-2">
+        <div><label class="text-[10px] uppercase text-zinc-500">Login</label><input id="mtLogin" placeholder="e.g. 125904269" class="w-full mt-1 bg-black/50 border border-white/10 rounded-xl px-3 py-3 text-[13px] font-mono"></div>
+        <div><label class="text-[10px] uppercase text-zinc-500">Password (investor ok)</label><input id="mtPass" type="password" placeholder="••••••••" class="w-full mt-1 bg-black/50 border border-white/10 rounded-xl px-3 py-3 text-[13px] font-mono"></div>
+      </div>
+      <button id="btnConnect" class="w-full bg-violet-600 hover:bg-violet-500 text-white py-3 rounded-full font-bold text-[13px] mt-1">🔌 Connect My Account & Pull Equity</button>
+      <div class="text-[10px] text-zinc-500 text-center">Password sent securely via HTTPS to MetaAPI → never stored in browser. We only save account ID.</div>
     </div>
-    <div id="liveText" class="text-[13px] text-[var(--text-dim)] leading-relaxed mono">Connecting…</div>
-    <div class="flex items-center gap-3 mt-4">
-      <button id="refreshBtn" class="tap bg-[var(--text)] text-black px-5 py-3 rounded-full text-[13px] font-[700]">↻ Refresh</button>
-      <span id="lastUpd" class="text-[10px] text-[var(--text-faint)] mono"></span>
-      <span id="modeBadge" class="ml-auto text-[10px] mono px-2.5 py-1 rounded-full bg-[rgba(240,166,58,0.14)] text-[var(--amber)] border border-[rgba(240,166,58,0.25)] hidden">DEMO $10K</span>
-    </div>
+    <div id="liveText" class="mt-3 text-[13px] text-zinc-300">Not connected — using $10k demo so you can test 0.0025 fix</div>
+    <div class="flex gap-2 mt-2"><button id="refreshBtn" class="bg-white text-black px-4 py-2 rounded-full text-[12px] font-bold hidden">↻ Refresh My Equity</button><span id="lastUpd" class="text-[10px] text-zinc-500 self-center"></span><span id="modeBadge" class="ml-auto text-[10px] px-2 py-1 rounded-full bg-amber-500/20 text-amber-300">DEMO $10k (not connected)</span></div>
   </div>
 
-  <div class="glass rounded-[18px] p-4 mb-3">
-    <div class="label mb-3">Position parameters</div>
+  <div class="glass rounded-[20px] p-4 mb-3">
     <div class="grid grid-cols-2 gap-3">
-      <div>
-        <label class="label">Symbol</label>
-        <input id="symbol" value="XAUUSD" class="w-full mt-1.5 field rounded-xl px-3.5 py-3.5 text-[16px] font-[700] mono">
-      </div>
-      <div>
-        <label class="label">Base</label>
-        <select id="mode" class="w-full mt-1.5 field rounded-xl px-3.5 py-3.5 text-[16px] text-[var(--text)]">
-          <option value="equity" selected>Equity</option>
-          <option value="balance">Balance</option>
-        </select>
-      </div>
-      <div class="col-span-2">
-        <label class="label">Risk % <span id="riskPctVal" class="mono text-[var(--violet)] normal-case tracking-normal font-[700]">1.0%</span></label>
-        <input id="riskPct" type="range" min="0.1" max="5" step="0.1" value="1" class="w-full mt-3 py-2">
-        <input id="riskPctNum" type="number" value="1" step="0.1" class="w-full mt-2 field rounded-xl px-3.5 py-3 text-[16px] mono">
-      </div>
-      <div class="col-span-2">
-        <label class="label">Stop loss (pips)</label>
-        <input id="sl" type="number" value="15" class="w-full mt-1.5 field rounded-xl px-3.5 py-3.5 text-[16px] mono">
-      </div>
+      <div><label class="text-[10px] uppercase text-zinc-500">Symbol</label><input id="symbol" value="XAUUSD" class="w-full mt-1 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[14px] font-bold"></div>
+      <div><label class="text-[10px] uppercase text-zinc-500">Mode</label><select id="mode" class="w-full mt-1 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[14px]"><option value="equity" selected>Equity</option><option value="balance">Balance</option></select></div>
+      <div><label class="text-[10px] uppercase text-zinc-500">Risk % <span id="riskPctVal" class="text-violet-400">1.0%</span></label><input id="riskPct" type="range" min="0.1" max="5" step="0.1" value="1" class="w-full mt-2 accent-violet-600"><input id="riskPctNum" type="number" value="1" step="0.1" class="w-full mt-1 bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-[13px]"></div>
+      <div><label class="text-[10px] uppercase text-zinc-500">Stop Loss pips</label><input id="sl" type="number" value="15" class="w-full mt-1 bg-black/40 border border-white/10 rounded-xl px-3 py-3 text-[14px]"></div>
     </div>
   </div>
 
-  <div class="hero-card rounded-[26px] p-5 mb-3 relative overflow-hidden">
-    <div class="hero-glow rounded-[26px]"></div>
-    <div class="relative">
-      <div class="label">Calculated lot size</div>
-      <div id="lot" class="mono text-[56px] font-[700] tracking-tight mt-1 text-[var(--text)]">0.0025</div>
-      <div class="text-[10.5px] text-[var(--text-faint)] mt-0.5">4 decimals under 0.01 · never zero · throttled 500ms</div>
-
-      <div class="grid grid-cols-2 gap-2.5 mt-5">
-        <div class="bg-black/35 border border-[var(--line-soft)] rounded-2xl p-3">
-          <div class="label">Risk amount</div>
-          <div id="riskAmt" class="mono text-[17px] font-[700] mt-1">$100.00</div>
-        </div>
-        <div class="bg-black/35 border border-[var(--line-soft)] rounded-2xl p-3">
-          <div class="label">Base used</div>
-          <div id="baseUsed" class="mono text-[12px] font-[600] mt-1.5 text-[var(--text-dim)]">equity $10,000</div>
-        </div>
-        <div class="bg-black/35 border border-[var(--line-soft)] rounded-2xl p-3">
-          <div class="label">Status</div>
-          <div id="status" class="text-[12px] font-[700] mt-1.5 text-[var(--emerald)]">Ready</div>
-        </div>
-        <div class="bg-black/35 border border-[var(--line-soft)] rounded-2xl p-3">
-          <div class="label">Pip value</div>
-          <div id="pipVal" class="mono text-[12px] font-[600] mt-1.5 text-[var(--text-dim)]">$10 / lot</div>
-        </div>
-      </div>
-
-      <button id="saveTrade" class="tap w-full mt-4 bg-[var(--violet)] text-black py-4 rounded-full font-[700] text-[15px] flex items-center justify-center gap-2">
-        <span>＋</span> Save trade
-      </button>
-      <div id="saveConfirm" class="text-center text-[11px] text-[var(--emerald)] mt-2 mono opacity-0 transition-opacity duration-300">Saved</div>
+  <div class="glass rounded-[28px] p-5 mb-3 border-violet-500/30 shadow-[0_0_40px_rgba(124,58,237,0.15)]">
+    <div class="text-[11px] uppercase tracking-widest text-zinc-500">Calculated Lot - 0.0025 FIXED</div>
+    <div id="lot" class="text-[52px] font-black tracking-tight mt-1">0.067</div>
+    <div class="text-[11px] text-zinc-500">4 decimals when &lt;0.01 • never 0.00 • throttled 500ms</div>
+    <div class="grid grid-cols-2 gap-3 mt-5">
+      <div class="bg-black/40 rounded-2xl p-3"><div class="text-[10px] uppercase text-zinc-500">Risk Amount</div><div id="riskAmt" class="text-[18px] font-bold">$100.00</div></div>
+      <div class="bg-black/40 rounded-2xl p-3"><div class="text-[10px] uppercase text-zinc-500">Base Used</div><div id="baseUsed" class="text-[12px] font-bold">equity $10,000 demo</div></div>
+      <div class="bg-black/40 rounded-2xl p-3"><div class="text-[10px] uppercase text-zinc-500">Status</div><div id="status" class="text-[12px] font-bold text-emerald-400">Demo mode - connect MT</div></div>
+      <div class="bg-black/40 rounded-2xl p-3"><div class="text-[10px] uppercase text-zinc-500">Pip Value</div><div id="pipVal" class="text-[12px] font-bold">$10 / lot</div></div>
     </div>
   </div>
 
-  <div class="glass rounded-[18px] p-4 mb-3">
-    <div class="flex justify-between items-center mb-3">
-      <span class="label">Trade history</span>
-      <span id="historyCount" class="text-[10px] text-[var(--text-faint)] mono">0 saved</span>
-    </div>
-    <div id="historyEmpty" class="text-[12px] text-[var(--text-faint)] py-2">No trades saved yet.</div>
-    <div id="historyList" class="space-y-2"></div>
-  </div>
-
-  <div class="glass rounded-[16px] p-4">
-    <div class="label mb-2.5">System status</div>
-    <div class="grid grid-cols-2 gap-y-2 text-[11.5px] text-[var(--text-dim)]">
-      <div class="flex items-center gap-2"><span class="dot bg-[var(--emerald)]"></span>Live equity feed</div>
-      <div class="flex items-center gap-2"><span class="dot bg-[var(--emerald)]"></span>0.0025 fixed floor</div>
-      <div class="flex items-center gap-2"><span class="dot bg-[var(--emerald)]"></span>Fetch throttle</div>
-      <div class="flex items-center gap-2"><span class="dot bg-[var(--emerald)]"></span>Zero-equity guardrail</div>
-    </div>
-    <div class="text-[10.5px] text-[var(--text-faint)] mt-3 pt-3 border-t border-[var(--line-soft)]">Pack 1 — trade history shipped. Presets land next.</div>
-  </div>
-
+  <div class="glass rounded-[16px] p-3"><div class="text-[10px] uppercase text-zinc-500">HOW IT SELLS</div><div class="text-[11px] text-zinc-400 mt-1">1. Customer pastes THEIR MT4/5 login (investor password OK) 2. We provision via MetaAPI in your Supabase 3. Pull THEIR live balance/equity 4. Calculate THEIR lot size<br>They pay for THEIR equity, not yours. $0 account on your side is fine.</div></div>
 </div>
 
 <script>
+// === CONFIG - SAME SUPABASE, NEW BYO FLOW ===
+const SUPA_URL = "https://zvtjrjnadvajmambsgre.supabase.co";
+const ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp2dGpyam5hZHZham1hbWJzZ3JlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxOTEzMzQsImV4cCI6MjEwMTc2NzMzNH0.LwAghCC_AZjZy9sHb3eBl4WSrn7SViKi6q2KAJep8e8";
+
 let state = {balance:10000, equity:10000, freeMargin:10000};
-let isDemoFallback = false;
-let sel = 'live';
-let lastFetch=0;
+let isDemo = true;
 
 function fmtLot(x){ if(!x||x<=0) return "0.0000"; if(x<0.01) return x.toFixed(4); if(x<0.1) return x.toFixed(3); return x.toFixed(2); }
 function calc(){
@@ -269,126 +75,91 @@ function calc(){
   const sl = parseFloat(document.getElementById('sl').value)||15;
   const mode = document.getElementById('mode').value;
   let base = mode==='balance'?state.balance:state.equity;
-  if (state.equity<=0 || isDemoFallback){ base=10000; document.getElementById('modeBadge').classList.remove('hidden'); } else { document.getElementById('modeBadge').classList.add('hidden'); }
+  if (isDemo){ base=10000; document.getElementById('modeBadge').classList.remove('hidden'); } else { document.getElementById('modeBadge').classList.add('hidden'); }
   const risk = base * (rp/100);
   const lot = risk / (sl*10);
   document.getElementById('lot').textContent = fmtLot(lot);
   document.getElementById('riskAmt').textContent = `$${risk.toFixed(2)}`;
-  document.getElementById('baseUsed').textContent = `${mode} $${base.toFixed(2)}${isDemoFallback?' demo':''}`;
+  document.getElementById('baseUsed').textContent = `${mode} $${base.toFixed(2)}${isDemo?' demo':''}`;
 }
-async function fetchLive(){
-  const now=Date.now(); if(now-lastFetch<500) return; lastFetch=now;
-  const txt=document.getElementById('liveText');
-  const anon = localStorage.getItem('rd_anon') || BAKED_ANON;
-  const liveId = localStorage.getItem('rd_live') || BAKED_LIVE;
-  const demoId = localStorage.getItem('rd_demo') || BAKED_DEMO;
-  const acc = sel==='live'?liveId:demoId;
-  if(!anon||!acc){ txt.innerHTML='<span class="text-amber-400">No demo ID - using $10k demo for testing</span>'; isDemoFallback=true; state={balance:10000,equity:10000,freeMargin:10000}; calc(); return; }
-  txt.textContent='Fetching live from TradeQuo-Server...';
+
+async function connectMT(){
+  const server = document.getElementById('mtServer').value.trim();
+  const platform = document.getElementById('mtPlatform').value;
+  const login = document.getElementById('mtLogin').value.trim();
+  const password = document.getElementById('mtPass').value.trim();
+  const txt = document.getElementById('liveText');
+  const badge = document.getElementById('connStatus');
+  const btn = document.getElementById('btnConnect');
+  if(!server||!login||!password){ txt.textContent='Fill server, login, password'; return; }
+  btn.textContent='⏳ Provisioning your account (10-30s first time)...';
+  btn.disabled=true;
+  badge.textContent='Provisioning...'; badge.className='text-[10px] px-2 py-1 rounded-full bg-amber-500/20 text-amber-300';
+  txt.textContent='Creating secure link to MetaAPI... first time takes 15-30s while MetaAPI deploys your account.';
   try{
-    const r=await fetch(`${SUPA_URL}/functions/v1/get-account-state`,{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${anon}`,"apikey":anon},body:JSON.stringify({accountId:acc})});
-    const t=await r.text();
-    if(!r.ok) throw new Error(t.slice(0,300));
+    const r = await fetch(`${SUPA_URL}/functions/v1/provision-account`,{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":`Bearer ${ANON}`,"apikey":ANON},
+      body:JSON.stringify({login, password, server, platform})
+    });
+    const t = await r.text();
+    if(!r.ok) throw new Error(t.slice(0,500));
+    const d = JSON.parse(t);
+    localStorage.setItem('rd_user_account', d.accountId);
+    localStorage.setItem('rd_user_login', login);
+    localStorage.setItem('rd_user_server', server);
+    state = {balance: d.balance, equity: d.equity, freeMargin: d.freeMargin||d.balance, marginLevel: d.marginLevel};
+    isDemo = false;
+    badge.textContent=`Connected ${login}`; badge.className='text-[10px] px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-300';
+    txt.innerHTML=`✅ Connected!<br>Bal $${d.balance.toFixed(2)} | Eq $${d.equity.toFixed(2)} | Free $${(d.freeMargin||0).toFixed(2)}<br>Account ID saved, will auto-refresh`;
+    document.getElementById('refreshBtn').classList.remove('hidden');
+    document.getElementById('modeBadge').classList.add('hidden');
+    document.getElementById('status').textContent='Live - your equity';
+    document.getElementById('lastUpd').textContent=new Date().toLocaleTimeString();
+    btn.textContent='✅ Connected - Change Account';
+    btn.disabled=false;
+    calc();
+  }catch(e){
+    txt.textContent='Failed: '+e.message.slice(0,400);
+    badge.textContent='Failed'; badge.className='text-[10px] px-2 py-1 rounded-full bg-red-500/20 text-red-300';
+    btn.textContent='🔌 Retry Connect';
+    btn.disabled=false;
+  }
+}
+
+async function refreshMy(){
+  const accountId = localStorage.getItem('rd_user_account');
+  if(!accountId){ calc(); return; }
+  const txt=document.getElementById('liveText');
+  try{
+    const r=await fetch(`${SUPA_URL}/functions/v1/get-account-state`,{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${ANON}`,"apikey":ANON},body:JSON.stringify({accountId})});
+    const t=await r.text(); if(!r.ok) throw new Error(t.slice(0,300));
     const d=JSON.parse(t);
-    if(d.equity<=0){ isDemoFallback=true; txt.innerHTML=`<span class="text-amber-400">Live $0.00 → Testing with $10k demo</span><br>Real: Bal $${d.balance?.toFixed(2)} Eq $${d.equity?.toFixed(2)}`; state={balance:10000,equity:10000,freeMargin:10000}; document.getElementById('modeBadge').textContent='DEMO $10k (live $0)'; document.getElementById('modeBadge').classList.remove('hidden'); } else { isDemoFallback=false; state=d; txt.textContent=`Bal $${d.balance.toFixed(2)} | Eq $${d.equity.toFixed(2)} | Free $${(d.freeMargin||0).toFixed(2)} | ML ${(d.marginLevel||0).toFixed(1)}%`; document.getElementById('modeBadge').classList.add('hidden'); }
+    state=d; isDemo=false;
+    txt.textContent=`Bal $${d.balance.toFixed(2)} | Eq $${d.equity.toFixed(2)} | Free $${(d.freeMargin||0).toFixed(2)} | ML ${(d.marginLevel||0).toFixed(1)}%`;
     document.getElementById('lastUpd').textContent=new Date().toLocaleTimeString();
     calc();
-  }catch(e){ txt.innerHTML=`Fetch failed: ${e.message.slice(0,150)}<br><span class="text-amber-400">Using $10k demo so you can test 0.0025</span>`; isDemoFallback=true; state={balance:10000,equity:10000,freeMargin:10000}; calc(); }
+  }catch(e){ txt.textContent='Refresh failed: '+e.message.slice(0,200); }
 }
-// haptic-style feedback: real vibration where the platform supports it (Android/PWA),
-// paired everywhere with the CSS press-scale in the stylesheet (works on iOS too)
-function buzz(ms=8){ try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){} }
 
-function openSheet(){
-  document.getElementById('inpAnon').value=localStorage.getItem('rd_anon')||BAKED_ANON;
-  document.getElementById('inpLive').value=localStorage.getItem('rd_live')||BAKED_LIVE;
-  document.getElementById('inpDemo').value=localStorage.getItem('rd_demo')||BAKED_DEMO;
-  document.getElementById('setup').classList.remove('translate-y-full');
-  document.getElementById('setupOverlay').classList.remove('opacity-0','pointer-events-none');
-}
-function closeSheet(){
-  document.getElementById('setup').classList.add('translate-y-full');
-  document.getElementById('setupOverlay').classList.add('opacity-0','pointer-events-none');
-}
-document.getElementById('gear').onclick=()=>{ buzz(); openSheet(); };
-document.getElementById('setupClose').onclick=()=>{ buzz(); closeSheet(); };
-document.getElementById('setupOverlay').onclick=closeSheet;
-document.getElementById('saveIds').onclick=()=>{ buzz(12); localStorage.setItem('rd_anon',document.getElementById('inpAnon').value.trim()); localStorage.setItem('rd_live',document.getElementById('inpLive').value.trim()); localStorage.setItem('rd_demo',document.getElementById('inpDemo').value.trim()); closeSheet(); fetchLive(); };
-document.querySelectorAll('.copyBtn').forEach(btn=>{
-  btn.onclick=async ()=>{
-    buzz();
-    const field = document.getElementById(btn.getAttribute('data-copy'));
-    const val = field.value;
-    try{
-      if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(val); }
-      else { field.removeAttribute('readonly'); field.select(); field.setSelectionRange(0,99999); document.execCommand('copy'); }
-      const orig = btn.textContent; btn.textContent='Copied'; setTimeout(()=>btn.textContent=orig, 1100);
-    }catch(e){ field.select(); }
-  };
-});
+document.getElementById('btnConnect').onclick=connectMT;
+document.getElementById('refreshBtn').onclick=refreshMy;
 document.getElementById('riskPct').oninput=e=>{ document.getElementById('riskPctVal').textContent=parseFloat(e.target.value).toFixed(1)+'%'; document.getElementById('riskPctNum').value=e.target.value; calc(); };
 document.getElementById('riskPctNum').oninput=e=>{ document.getElementById('riskPct').value=e.target.value; document.getElementById('riskPctVal').textContent=parseFloat(e.target.value).toFixed(1)+'%'; calc(); };
 document.getElementById('sl').oninput=calc; document.getElementById('mode').onchange=calc;
-document.getElementById('refreshBtn').onclick=()=>{ buzz(); fetchLive(); };
-document.getElementById('btnLive').onclick=()=>{ buzz(); sel='live'; document.getElementById('btnLive').className='tap seg-btn px-4 py-2.5 rounded-full bg-[var(--violet)] text-black text-[12px] font-[700]'; document.getElementById('btnDemo').className='tap seg-btn px-4 py-2.5 rounded-full text-[12px] text-[var(--text-dim)] font-[600]'; fetchLive(); };
-document.getElementById('btnDemo').onclick=()=>{ buzz(); sel='demo'; if(!localStorage.getItem('rd_demo')){ document.getElementById('liveText').innerHTML='No demo ID yet - using $10k test mode. Create MetaAPI demo 125897359 to get real demo equity.'; isDemoFallback=true; calc(); return; } document.getElementById('btnDemo').className='tap seg-btn px-4 py-2.5 rounded-full bg-[var(--violet)] text-black text-[12px] font-[700]'; document.getElementById('btnLive').className='tap seg-btn px-4 py-2.5 rounded-full text-[12px] text-[var(--text-dim)] font-[600]'; fetchLive(); };
 
-// === PACK 1: TRADE HISTORY ===
-const HISTORY_KEY = 'rd_history';
-function loadHistory(){ try{ return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }catch(e){ return []; } }
-function saveHistory(list){ localStorage.setItem(HISTORY_KEY, JSON.stringify(list)); }
-function renderHistory(){
-  const list = loadHistory();
-  const wrap = document.getElementById('historyList');
-  const empty = document.getElementById('historyEmpty');
-  document.getElementById('historyCount').textContent = `${list.length} saved`;
-  if(list.length===0){ empty.classList.remove('hidden'); wrap.innerHTML=''; return; }
-  empty.classList.add('hidden');
-  wrap.innerHTML = list.slice().reverse().map(t=>`
-    <div class="flex items-center justify-between bg-black/35 border border-[var(--line-soft)] rounded-2xl px-3 py-2.5">
-      <div>
-        <div class="mono text-[13px] font-[700]">${t.symbol} · ${t.lot}</div>
-        <div class="text-[10.5px] text-[var(--text-faint)] mono mt-0.5">${t.riskPct}% risk · ${t.sl} pips SL · ${t.baseUsed}</div>
-        <div class="text-[9.5px] text-[var(--text-faint)] mono mt-0.5">${new Date(t.timestamp).toLocaleString()}</div>
-      </div>
-      <button data-id="${t.id}" class="tap delTrade w-11 h-11 rounded-full bg-[var(--surface-2)] border border-[var(--line)] flex items-center justify-center text-[15px] text-[var(--text-dim)] shrink-0 ml-2">✕</button>
-    </div>
-  `).join('');
-  wrap.querySelectorAll('.delTrade').forEach(btn=>{
-    btn.onclick=()=>{
-      buzz();
-      const id = btn.getAttribute('data-id');
-      saveHistory(loadHistory().filter(t=>t.id!==id));
-      renderHistory();
-    };
-  });
-}
-document.getElementById('saveTrade').onclick=()=>{
-  buzz(14);
-  const mode = document.getElementById('mode').value;
-  const base = mode==='balance'?state.balance:state.equity;
-  const equityUsed = (state.equity<=0||isDemoFallback) ? 10000 : base;
-  const trade = {
-    id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())+Math.random().toString(16).slice(2)),
-    symbol: document.getElementById('symbol').value.trim() || 'XAUUSD',
-    lot: document.getElementById('lot').textContent,
-    riskPct: parseFloat(document.getElementById('riskPct').value)||1,
-    sl: parseFloat(document.getElementById('sl').value)||15,
-    baseUsed: document.getElementById('baseUsed').textContent,
-    equityUsed: equityUsed,
-    timestamp: Date.now()
-  };
-  const list = loadHistory();
-  list.push(trade);
-  saveHistory(list);
-  renderHistory();
-  const conf = document.getElementById('saveConfirm');
-  conf.classList.remove('opacity-0');
-  setTimeout(()=>conf.classList.add('opacity-0'), 1200);
-};
-
-fetchLive(); calc(); renderHistory();
-setInterval(fetchLive, 10000);
+// auto-load if already connected
+(function(){
+  const acc=localStorage.getItem('rd_user_account');
+  if(acc){
+    document.getElementById('mtLogin').value=localStorage.getItem('rd_user_login')||'';
+    document.getElementById('mtServer').value=localStorage.getItem('rd_user_server')||'TradeQuo-Server';
+    document.getElementById('connStatus').textContent='Saved - refreshing...';
+    document.getElementById('refreshBtn').classList.remove('hidden');
+    refreshMy();
+  }
+})();
+calc();
 </script>
 </body>
 </html>
